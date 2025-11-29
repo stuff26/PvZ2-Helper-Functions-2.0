@@ -43,6 +43,6 @@ Removes layers in a single symbol or XFL that do not contain any keyframes with 
 Changes a split label type XFL into a main_sprite type or vice-versa
 
 ### Convert Newspaper Zombie XFL
-Converts a Newspaper Zombie XFL into an XFL that is easier for Sen to pack by handling some of the tedious work adjusting. For a more proper guide on how to use it, please see this video from Hamulous: https://youtu.be/SyAoR_PYe5s?si=rpdpxTouxsNRXQBU
+Converts a Newspaper Zombie XFL into an XFL that is easier for Sen to pack by handling some of the tedious work adjusting. For a more proper guide on how to use it, please see [this video](https://youtu.be/SyAoR_PYe5s?si=rpdpxTouxsNRXQBU) from Hamulous
 
 If you have suggestions on what kind of functions to add, feel free to reach out to me either on Discord @stuff26
