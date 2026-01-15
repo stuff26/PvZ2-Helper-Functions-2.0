@@ -45,4 +45,16 @@ Changes a split label type XFL into a main_sprite type or vice-versa
 ### Convert Newspaper Zombie XFL
 Converts a Newspaper Zombie XFL into an XFL that is easier for Sen to pack by handling some of the tedious work adjusting. For a more proper guide on how to use it, please see [this video](https://youtu.be/SyAoR_PYe5s?si=rpdpxTouxsNRXQBU) from Hamulous
 
+### Switch Image Names
+Renames all the image symbols in an XFL to the media that it uses, or all the media to what image symbol uses it, helpful for fixing inconsistent naming schemes
+
+### Rename All Media
+Renames all media and image symbols to a consistent naming scheme of {PREFIX}_1, {PREFIX}_2, et, also helpful for quickly fixing inconsistent naming schemes
+
+### Check Action Frames
+Checks through all the action frames from the [Snowie Lib](https://docs.google.com/document/d/1e8vP-VS5o0Nte2eHg6eBsvLpjHiLYPQMMHR5t80dGv4/edit?usp=sharing) that an XFL may use to find any potential errors
+
+### Speed Up Anim.
+Speeds up a symbol by removing extra frames
+
 If you have suggestions on what kind of functions to add, feel free to reach out to me either on Discord @stuff26
