@@ -18,15 +18,15 @@ namespace XflComponents
         // Lists
         [XmlArray("layers", Namespace = "http://ns.adobe.com/xfl/2008/")]
         [XmlArrayItem("DOMLayer", typeof(AnimateLayer), Namespace = "http://ns.adobe.com/xfl/2008/")]
-        public List<AnimateLayer>? Layers { get; set; } = [];
+        public List<AnimateLayer> Layers { get; set; } = [];
 
         /// <summary>
         /// Replace the current layers with a new list of layers
         /// </summary>
         /// <param name="NewLayers">Layers that will replace the current ones</param>
-        public void ReplaceLayers(List<AnimateLayer>? NewLayers)
+        public void ReplaceLayers(List<AnimateLayer> newLayers)
         {
-            Layers = NewLayers;
+            Layers = newLayers;
         }
 
         /// <summary>
@@ -35,7 +35,6 @@ namespace XflComponents
         /// <returns>An int saying the number of layers in the timeline</returns>
         public int GetLayerCount()
         {
-            if (Layers is null) return 0;
             return Layers.Count;
         }
 
@@ -45,16 +44,15 @@ namespace XflComponents
         /// <returns>A list of every frame found</returns>
         public List<AnimateFrame> GetAllFrames()
         {
-            List<AnimateFrame>? AllFrames = [];
-            if (Layers is null) return AllFrames;
+            List<AnimateFrame>? allFrames = [];
             foreach (AnimateLayer? layer in Layers)
             {
-                List<AnimateFrame>? Frames = layer?.Frames;
-                if (layer is null || Frames is null) continue;
-                AllFrames.AddRange(Frames);
+                List<AnimateFrame>? frames = layer?.Frames;
+                if (layer is null || frames is null) continue;
+                allFrames.AddRange(frames);
             }
 
-            return AllFrames;
+            return allFrames;
         }
 
         /// <summary>
@@ -63,17 +61,16 @@ namespace XflComponents
         /// <returns>A list of every element found in the timeline</returns>
         public List<FrameElements> GetAllElements()
         {
-            if (Layers is null) return [];
-            List<FrameElements> AllElements = [];
+            List<FrameElements> allElements = [];
 
             foreach (AnimateLayer? layer in Layers)
             {
                 if (layer is null) continue;
                 List<FrameElements> LayerElements = layer.GetAllFrameElements();
-                AllElements.AddRange(LayerElements);
+                allElements.AddRange(LayerElements);
             }
 
-            return AllElements;
+            return allElements;
         }
 
         /// <summary>
@@ -83,24 +80,24 @@ namespace XflComponents
         /// <returns>A list of every library item found in the timeline</returns>
         public List<string?> GetAllLibraryItems(bool unique = true)
         {
-            List<string?>? AllLibraryItems = [];
-            if (Layers is null) return AllLibraryItems;
+            List<string?> allLibraryItems = [];
+            HashSet<string?> uniqueLibraryItems = [];
 
             foreach (AnimateLayer? layer in Layers)
             {
-                List<string>? LibraryItems = layer?.GetAllLibraryItems(unique);
-                if (LibraryItems is null) continue;
+                List<string>? libraryItems = layer?.GetAllLibraryItems(unique);
+                if (libraryItems is null) continue;
 
-                foreach (string? libraryItemName in LibraryItems)
+                foreach (string? libraryItemName in libraryItems)
                 {
-                    AllLibraryItems.Add(libraryItemName);
+                    if (unique)
+                        uniqueLibraryItems.Add(libraryItemName);
+                    else
+                        allLibraryItems.Add(libraryItemName);
                 }
             }
-            if (unique)
-            {
-                AllLibraryItems = AllLibraryItems.Distinct().ToList();
-            }
-            return AllLibraryItems;
+            if (unique) return uniqueLibraryItems.ToList();
+            else return allLibraryItems;
         }
 
         /// <summary>
@@ -110,55 +107,27 @@ namespace XflComponents
         /// <returns>An alphabetically sorted list of every library item found in the timeline</returns>
         public List<string?> GetAllLibraryItemsSorted(bool unique = true)
         {
-            List<string?> AllLibraryItems = GetAllLibraryItems(unique);
-            AllLibraryItems.Sort();
-            return AllLibraryItems;
+            List<string?> allLibraryItems = GetAllLibraryItems(unique);
+            allLibraryItems.Sort();
+            return allLibraryItems;
         }
 
         /// <summary>
-        /// Go through all layers in the timeline and remove ones that contain no elements
+        /// Go through all layers in the timeline and remove ones that contain no elements by mutating
         /// </summary>
         public void RemoveEmptyLayers()
         {
-            if (Layers is null) return;
-
-            // Initialize new list of layers
-            var NewLayerList = new List<AnimateLayer>();
-
-            // Loop through layer list, add ones that contain elements
-            foreach (AnimateLayer layer in Layers)
-            {
-                if (layer.Frames is null || layer.Frames.Count == 0) continue;
-                var libraryItems = layer.GetAllLibraryItems();
-                if (libraryItems.Count != 0)
-                {
-                    NewLayerList.Add(layer);
-                }
-            }
-
-            // If the layer list is empty, add an empty layer for safe measures
-            if (NewLayerList.Count == 0)
-            {
-                AnimateFrame emptyFrame = AnimateFrame.GetEmptyFrame(0);
-                AnimateLayer emptyLayer = new()
-                {
-                    name = "",
-                    color = "#4F4FFF",
-                    Frames = [emptyFrame],
-                };
-                NewLayerList.Add(emptyLayer);
-            }
-
-            Layers = NewLayerList;
+            Layers = RemoveEmptyLayers(Layers);
         }
 
         /// <summary>
         /// Go through all layers in the timeline and remove ones that contain no elements
         /// </summary>
+        /// <returns>List of layers without the empty layers
         public static List<AnimateLayer> RemoveEmptyLayers(List<AnimateLayer> Layers)
         {
             // Initialize new list of layers
-            var NewLayerList = new List<AnimateLayer>();
+            var newLayerList = new List<AnimateLayer>();
 
             // Loop through layer list, add ones that contain elements
             foreach (AnimateLayer layer in Layers)
@@ -167,12 +136,12 @@ namespace XflComponents
                 var libraryItems = layer.GetAllLibraryItems();
                 if (libraryItems.Count != 0)
                 {
-                    NewLayerList.Add(layer);
+                    newLayerList.Add(layer);
                 }
             }
 
             // If the layer list is empty, add an empty layer for safe measures
-            if (NewLayerList.Count == 0)
+            if (newLayerList.Count == 0)
             {
                 AnimateFrame emptyFrame = AnimateFrame.GetEmptyFrame(0);
                 AnimateLayer emptyLayer = new()
@@ -181,10 +150,10 @@ namespace XflComponents
                     color = "#4F4FFF",
                     Frames = [emptyFrame],
                 };
-                NewLayerList.Add(emptyLayer);
+                newLayerList.Add(emptyLayer);
             }
 
-            return NewLayerList;
+            return newLayerList;
         }
 
         /// <summary>
@@ -194,7 +163,6 @@ namespace XflComponents
         /// <returns>An AnimateLayer object with the wanted name if found, otherwise null</returns>
         public AnimateLayer? GetLayerByName(string nameToFind)
         {
-            if (Layers is null) return new AnimateLayer();
             foreach (var layer in Layers)
             {
                 if (layer.name == nameToFind)
@@ -206,7 +174,7 @@ namespace XflComponents
             return null;
         }
         /// <summary>
-        /// Cuts out a portion of all of the frames in the timeline and replaces the layers with it
+        /// Mutates and cuts out a portion of all of the frames in the timeline and replaces the layers with it
         /// </summary>
         /// <param name="beginIndex"></param>
         /// <param name="endIndex"></param>
@@ -225,16 +193,15 @@ namespace XflComponents
 
         public List<string> GetLayerNames()
         {
-            List<string> layerNames = [];
-            if (Layers is null) return layerNames;
+            HashSet<string> layerNames = [];
             foreach (var layer in Layers)
             {
                 var name = layer.name;
-                if (!string.IsNullOrEmpty(name) && !layerNames.Contains(name))
+                if (!string.IsNullOrEmpty(name))
                     layerNames.Add(name);
             }
 
-            return layerNames;
+            return layerNames.ToList();
         }
 
         /// <summary>
@@ -244,9 +211,8 @@ namespace XflComponents
         public int GetTotalLength()
         {
             var layers = Layers;
-            if (layers is null) return 0;
 
-            int maxTime = -1;
+            int maxTime = 0;
             foreach (var layer in layers)
             {
                 int layerLength = layer.GetLayerLength();
@@ -271,9 +237,11 @@ namespace XflComponents
             }
         }
 
+        /// <summary>
+        /// Remove any empty frames at the end of every layer found in the timeline, remove empty layers
+        /// </summary>
         public void RemoveTrailingFrames()
         {
-            if (Layers is null) return;
             for (int layerIndex = Layers.Count - 1; layerIndex >= 0; layerIndex--)
             {
                 var currentLayer = Layers[layerIndex];
@@ -283,6 +251,21 @@ namespace XflComponents
                     Layers.RemoveAt(layerIndex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Get all of the action scripts found in the frames of the timeline
+        /// </summary>
+        /// <returns>A string list of all the found action frames</returns>
+        public List<string> GetActionScripts(bool splitLines = false)
+        {
+            List<string> actionFrames = [];
+            var frames = GetAllFrames();
+            foreach (var frame in frames)
+            {
+                actionFrames.AddRange(frame.GetActionScripts(splitLines:splitLines));
+            }
+            return actionFrames;
         }
 
         public override string ToString()

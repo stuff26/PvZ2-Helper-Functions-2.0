@@ -3,22 +3,19 @@ namespace HelperFunctions
 {
     public class ProgressChecker
     {
-        public string Message { get; set; }
         public int CursorPosition { get; set; }
         public int ConsoleHeight { get; set; }
         public int MaxCount { get; set; }
         public int CurrentAmount { get; set; }
         public int NumErrors { get; set; }
 
-        public ProgressChecker(string message, int MaxCount)
+        public ProgressChecker(string message, int maxCount)
         {
-            Message = message;
             CursorPosition = message.Length;
             ConsoleHeight = Console.GetCursorPosition().Top;
-            this.MaxCount = MaxCount;
-            CurrentAmount = 0;
-            NumErrors = 0;
-            Console.Write($"{Message}");
+            MaxCount = maxCount;
+            CurrentAmount = 0; NumErrors = 0;
+            Console.Write($"{message}");
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"{CurrentAmount}/{MaxCount}");
         }
@@ -28,10 +25,10 @@ namespace HelperFunctions
             Console.SetCursorPosition(CursorPosition, ConsoleHeight);
         }
 
-        public void AddOne()
+        public void AddOne(bool adjustPosition = true)
         {
             CurrentAmount++;
-            AdjustPosition();
+            if (adjustPosition) AdjustPosition();
             if (CurrentAmount == MaxCount)
                 Console.ForegroundColor = ConsoleColor.Yellow;
             else
@@ -45,8 +42,10 @@ namespace HelperFunctions
             }
         }
 
+        // UNUSED
         public void RemoveOne()
         {
+            ConsoleHeight -= 2 - NumErrors;
             NumErrors++;
             var currentTop = Console.GetCursorPosition().Top;
             MaxCount--;
@@ -55,16 +54,7 @@ namespace HelperFunctions
             AdjustPosition();
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"{CurrentAmount}/{MaxCount}");
-            if (CurrentAmount == MaxCount)
-            {
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine();
-                Console.SetCursorPosition(0, currentTop + NumErrors + 1);
-            }
-            else
-            {
-                Console.SetCursorPosition(0, currentTop + NumErrors);
-            }
+            Console.SetCursorPosition(0, currentTop);
         }
 
         public void FixCursorPosition()

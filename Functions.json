@@ -11,28 +11,28 @@
             "Name": "Rename All Layers",
             "Description": "Go through every layer and rename them either by number or used library item",
             "Input": "XFL Folder or single symbol",
-            "Output": "Symbol(s) with renamed layers",
+            "Output": "Edited symbol(s)",
             "ClassName": "RenameAllLayers"
         },
         {
             "Name": "Split Multi-library Item Layers",
             "Description": "Split up layers that use multiple different library items",
             "Input": "XFL Folder or single symbol",
-            "Output": "Symbol(s) with split layers",
+            "Output": "Edited symbol(s)",
             "ClassName": "SplitMultiFrameLayers"
         },
         {
             "Name": "Offset Sprite Positions",
             "Description": "Go through every element in a symbol and offset it by a certain amount in each direction",
             "Input": "XFL Folder or single symbol",
-            "Output": "Symbol(s) with offset sprite positions",
+            "Output": "Edited symbol(s)",
             "ClassName": "OffsetSpritePositions"
         },
         {
             "Name": "Remake XFL data.json",
             "Description": "Go through all the bitmaps in an XFL, remake data.json with them with recalculated dimensions",
             "Input": "XFL Folder",
-            "Output": "XFL data.json with updated sprite information",
+            "Output": "XFL data.json",
             "ClassName": "RemakeXflDataJson"
         },
         {
@@ -46,15 +46,43 @@
             "Name": "Remove Empty Layers",
             "Description": "Delete any layers without any elements in a symbol or XFL",
             "Input": "XFL Folder or single symbol",
-            "Output": "Symbol(s) with empty layers removed",
+            "Output": "Edited symbol(s)",
             "ClassName": "RemoveEmptyLayers"
         },
         {
             "Name": "Convert Newspaper Zombie XFL",
             "Description": "Adjust XFLs from Newspaper Zombie into an XFL convertable into a PAM",
             "Input": "XFL Folder",
-            "Output": "Adjusted XFL",
+            "Output": "New XFL",
             "ClassName": "ConvertNZXfl"
+        },
+        {
+            "Name": "Switch Image Names",
+            "Description": "Renames all media to its corresponding image or all images to its corresponding image",
+            "Input": "XFL Folder",
+            "Output": "Adjusted XFL",
+            "ClassName": "SwitchImageNames"
+        },
+        {
+            "Name": "Rename All Media",
+            "Description": "Renames all image symbols and media to a consistent naming scheme",
+            "Input": "XFL Folder",
+            "Output": "Adjusted XFL",
+            "ClassName": "RenameAllMedia"
+        },
+        {
+            "Name": "Check Action Frames",
+            "Description": "Checks for possible errors for any action frames from Snowie Lib",
+            "Input": "XFL Folder",
+            "Output": "Message with found errors",
+            "ClassName": "CheckActionFrames"
+        },
+        {
+            "Name": "Speed Up Symbol",
+            "Description": "Removes frames from a symbol to speed up an animation",
+            "Input": "XFL Symbol",
+            "Output": "Edited symbol",
+            "ClassName": "SpeedUpAnim"
         }
     ],
     "PACKAGES": [
@@ -78,6 +106,13 @@
             "Input": "OBB Folder",
             "Output": "data.json with present SCGs found",
             "ClassName": "RemakeObbDataJson"
+        },
+        {
+            "Name": "Check Level Errors",
+            "Description": "Checks for possible errors in a level file",
+            "Input": "Level file and packages",
+            "Output": "Message with found errors",
+            "ClassName": "CheckLevelErrors"
         }
     ]
 }

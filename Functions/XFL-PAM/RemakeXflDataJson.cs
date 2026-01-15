@@ -141,7 +141,7 @@ namespace HelperFunctions.Functions.Packages
             using var documentReader = document.CreateReader();
             DOMDocument DOMDocumentObject = (DOMDocument?)DOMDocument.serializer.Deserialize(documentReader)!;
 
-            var spriteNames = DOMDocumentObject.GetAllBitmapNames();
+            var spriteNames = DOMDocumentObject.GetAllBitmapNames(getFileEnding:true);
             return spriteNames;
         }
 
@@ -158,30 +158,11 @@ namespace HelperFunctions.Functions.Packages
                 var fullSpritePath = Path.Join(xflPath, "library", spriteName);
                 int width;
                 int height;
-                try
-                {
-                    using Image image = Image.Load(fullSpritePath);
-                    width = (int)((image.Width * (1200.0 / resolution)) + 0.25);
-                    height = (int)((image.Height * (1200.0 / resolution)) + 0.25);
-                }
-                catch (FileNotFoundException)
-                {
-                    addedSprites.RemoveOne();
-                    Console.WriteLine($"Could not find sprite {spriteName}, will be skipped");
-                    continue;
-                }
-                catch (OutOfMemoryException)
-                {
-                    addedSprites.RemoveOne();
-                    Console.WriteLine($"Sprite {spriteName} could not be read, will be skipped");
-                    continue;
-                }
-                catch (UnknownImageFormatException)
-                {
-                    addedSprites.RemoveOne();
-                    Console.WriteLine($"Sprite {spriteName} could not be read, will be skipped");
-                    continue;
-                }
+                
+                using Image image = Image.Load(fullSpritePath);
+                width = (int)((image.Width * (1200.0 / resolution)) + 0.25);
+                height = (int)((image.Height * (1200.0 / resolution)) + 0.25);
+
                 var baseSpriteName = Path.GetFileName(spriteName)!.Replace(".png", "");
                 spriteInfo.Add((baseSpriteName, width, height));
                 addedSprites.AddOne();

@@ -8,29 +8,35 @@ namespace HelperFunctions.Functions.Packages
     public class SwitchXflType
     {
         public static void Function()
-        {
+        {   
+            // Get the XFL that will be converted
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("Enter the XFL you want to convert");
             var xflPath = UM.AskForDirectory(["DOMDocument.xml"]);
 
+            // Get the type of XFL this is
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("Enter the type of XFL this is");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("[1] Split labels");
-            Console.WriteLine("[2] Nonsplit labels");
+            Console.WriteLine("[1] Split labels (contains label folder)");
+            Console.WriteLine("[2] Nonsplit labels (uses main_sprite)");
             int xflType = UM.AskForInt(1, 2);
 
+            // Get DOMDocument
             var domdocumentPath = Path.Join(xflPath, "DOMDocument.xml");
             XDocument document = XDocument.Load(domdocumentPath);
             using var documentReader = document.CreateReader();
             DOMDocument DOMDocumentObject = (DOMDocument?)DOMDocument.serializer.Deserialize(documentReader)!;
 
 
+            // If split labels --> nonsplit labels
             if (xflType == 1)
             {
+                // Check for potential errors ahead of time
                 bool foundErrors = CheckXflType1Errors(DOMDocumentObject, xflPath);
                 if (foundErrors) return;
 
+                // Get a dictionary containing every label and its corresponding symbol
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Retrieving symbol details...");
                 var labelSymbolDict = GetLabelSymbolDict(DOMDocumentObject, xflPath);
@@ -38,6 +44,7 @@ namespace HelperFunctions.Functions.Packages
                 var labelDurations = DOMDocumentObject.GetLabelLengths()!;
                 ProgressChecker.WriteFinished();
 
+                // Create main_sprite symbol object
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Creating main_sprite... ");
                 var mainSymbolItem = new SymbolItem("main_sprite");
@@ -93,19 +100,20 @@ namespace HelperFunctions.Functions.Packages
                 editFiles.AddOne();
             }
 
+            // If nonsplit labels --> split labels
             if (xflType == 2)
-            {
+            {   
+                // Get main symbol, check for possible errors
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Retrieving main_sprite... ");
-                // Get main symbol, check for possible errors
                 var mainSymbol = CheckXflType2Errors(DOMDocumentObject, xflPath);
-                if (mainSymbol is null) return;
+                if (mainSymbol is null) return; // mainSymbol is null if there are errors found
                 var labelIndexes = DOMDocumentObject.GetLabelIndexes();
                 ProgressChecker.WriteFinished();
 
+                // Make label folder, add to DOMDocument
                 Console.ForegroundColor = ConsoleColor.Green;
                 var makeLabelSymbols = new ProgressChecker("Writing new label symbols... ", labelIndexes.Count);
-                // Add "label" folder
                 Directory.CreateDirectory(Path.Join(xflPath, "library", "label"));
                 DOMDocumentObject.AddNewFolderItem("label");
 
@@ -134,14 +142,14 @@ namespace HelperFunctions.Functions.Packages
                     makeLabelSymbols.AddOne();
                 }
 
+                // Add instance layer to DOMDocument
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Editing DOMDocument... ");
-                // Add instance layer to DOMDocument
                 var instanceLayer = DOMDocumentObject.Timeline.GetLayerByName("instance");
                 instanceLayer ??= new AnimateLayer()
                 {
                     name = "layer",
-                    color = AnimateLayer.defaultColor
+                    color = AnimateLayer.DefaultColor
                 };
                 instanceLayer.Frames = AnimateFrame.GetKeyframeSeries(labelIndexes);
 
@@ -226,6 +234,7 @@ namespace HelperFunctions.Functions.Packages
             Console.ForegroundColor = ConsoleColor.Red;
             bool foundErrors = false;
 
+            // Check for duplicate layers
             var labels = DOMDocument.GetAllLabels();
             if (labels.Distinct().ToList().Count != labels.Count)
             {
@@ -233,6 +242,7 @@ namespace HelperFunctions.Functions.Packages
                 Console.WriteLine("Duplicate labels are found in the DOMDocument");
             }
 
+            // Check if label symbols are missing
             var symbols = DOMDocument.GetAllSymbolNames();
             foreach (var label in labels)
             {
@@ -247,6 +257,7 @@ namespace HelperFunctions.Functions.Packages
         }
         private static SymbolItem? CheckXflType2Errors(DOMDocument DOMDocument, string xflPath)
         {
+            // Check for if main_sprite doesn't exist
             Console.ForegroundColor = ConsoleColor.Red;
             bool foundErrors = false;
             SymbolItem? mainSprite = null;
@@ -257,6 +268,7 @@ namespace HelperFunctions.Functions.Packages
             }
             else
             {
+                // Check that main_sprite.xml exists or not
                 var libraryPath = Path.Join(xflPath, "library");
                 var libraryItems = Directory.GetFiles(libraryPath, "*.*", SearchOption.TopDirectoryOnly).ToList();
                 if (!libraryItems.Contains(Path.Join(libraryPath, "main_sprite.xml")))
@@ -288,6 +300,7 @@ namespace HelperFunctions.Functions.Packages
 
             if (instanceLayer is not null)
             {
+                // Check if instance layer and main_sprite have different lengths
                 int instanceLayerLength = instanceLayer.GetLayerLength();
                 if (mainSprite is not null && instanceLayerLength != mainSprite.Timeline!.GetTotalLength())
                 {
@@ -295,6 +308,7 @@ namespace HelperFunctions.Functions.Packages
                     foundErrors = true;
                 }
 
+                // Check if instance layer does not use one specific library item
                 var instanceLayerLibraryItems = instanceLayer.GetAllLibraryItems();
                 int numOfInstanceLayerItems = instanceLayerLibraryItems.Count;
                 if (numOfInstanceLayerItems == 0)

@@ -34,9 +34,6 @@ namespace HelperFunctions.Functions.Packages
             }
         }
 
-
-
-
         public static (List<string> SymbolPathList, List<SymbolItem> SymbolList) AskForSymbolItem()
         {
             while (true)
@@ -74,34 +71,12 @@ namespace HelperFunctions.Functions.Packages
                 Console.ForegroundColor = ConsoleColor.Red;
                 foreach (string symbolPath in SymbolDirectories)
                 {
-                    SymbolItem? symbol;
-                    try
-                    {
-                        XDocument symbolDocument = XDocument.Load(symbolPath);
-                        using var documentReader = symbolDocument.CreateReader();
-                        symbol = (SymbolItem?)SymbolItem.serializer.Deserialize(documentReader);
-                        if (symbol is null || symbol.Timeline is null)
-                        {
-                            throw new System.Xml.XmlException();
-                        }
-                    }
-                    catch (System.Xml.XmlException)
-                    {
-                        getSymbols.RemoveOne();
-                        Console.WriteLine($"The symbol {Path.GetFileName(symbolPath)} doesn't seem to be valid, will be ignored");
-                        continue;
-                    }
-
-                    // Check if the symbol itself and the timeline is null
-                    if (symbol is null || symbol.Timeline is null)
-                    {
-                        getSymbols.RemoveOne();
-                        Console.WriteLine($"The symbol {Path.GetFileName(symbolPath)} doesn't seem to be valid, will be ignored");
-                        continue;
-                    }
+                    XDocument symbolDocument = XDocument.Load(symbolPath);
+                    using var documentReader = symbolDocument.CreateReader();
+                    SymbolItem? symbol = (SymbolItem?)SymbolItem.serializer.Deserialize(documentReader);
 
                     AllSymbolPaths.Add(symbolPath);
-                    SymbolList.Add(symbol);
+                    SymbolList.Add(symbol!);
                     getSymbols.AddOne();
                 }
 

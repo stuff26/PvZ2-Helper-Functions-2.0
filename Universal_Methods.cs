@@ -377,7 +377,7 @@ namespace UniversalMethods
         /// Ask the user for a path to a symbol item
         /// </summary>
         /// <returns>A value tuple of the XDocument, path to symbol item, and object symbol item</returns>
-        public static (XDocument document, string documentPath, SymbolItem symbol) AskForSymbolItem()
+        public static (string documentPath, SymbolItem symbol) AskForSymbolItem()
         {
             while (true)
             {
@@ -424,7 +424,7 @@ namespace UniversalMethods
 
                 // Return
                 Console.ForegroundColor = ConsoleColor.White;
-                var toReturn = (document, pathInput, symbol);
+                var toReturn = (pathInput, symbol);
                 return toReturn;
             }
         }
@@ -568,12 +568,16 @@ namespace UniversalMethods
         /// </summary>
         /// <param name="wantedFiles">Set of files that should be checked to find</param>
         /// <returns>The directory entered by the user</returns>
-        public static string AskForDirectory(string[]? wantedFiles = null, string[]? wantedDirs = null)
+        public static string AskForDirectory(string[]? wantedFiles = null, string[]? wantedDirs = null, bool allowNoAnswer = false)
         {
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 var userInput = Console.ReadLine()?.Replace("\"", "");
+                if (allowNoAnswer && userInput == "")
+                {
+                    return "";
+                }
                 Console.ForegroundColor = ConsoleColor.Red;
                 if (string.IsNullOrWhiteSpace(userInput))
                 {

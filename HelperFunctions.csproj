@@ -15,7 +15,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
     <EmbeddedResource Include="Functions.json" />
-    <EmbeddedResource Include="Functions/Packages/LevelCheckingGuide.json" />
+    <EmbeddedResource Include="LevelCheckingGuide.json" />
     <Compile Remove="Functions/XMLTester.cs" />
   </ItemGroup>
 

@@ -109,6 +109,12 @@ namespace HelperFunctions.Functions.Packages
                     Console.WriteLine("Enter a prefix to be used");
                     continue;
                 }
+                if (userInput.Contains('/') || userInput.Contains('\\'))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Enter a prefix without \"/\" or \"\\\"");
+                    continue;
+                }
                 if (originalXfl == userInput)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;

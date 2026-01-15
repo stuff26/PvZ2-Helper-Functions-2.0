@@ -106,35 +106,13 @@ namespace HelperFunctions.Functions.Packages
                 foreach (string symbolPath in SymbolDirectories)
                 {
                     SymbolItem? symbol;
-                    try
-                    {
-                        XDocument symbolDocument = XDocument.Load(symbolPath);
-                        using var documentReader = symbolDocument.CreateReader();
-                        symbol = (SymbolItem?)SymbolItem.serializer.Deserialize(documentReader);
-                        if (symbol is null || symbol.Timeline is null)
-                        {
-                            throw new System.Xml.XmlException();
-                        }
-                    }
-                    catch (System.Xml.XmlException)
-                    {
-                        retrieveSymbols?.RemoveOne();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"The symbol {Path.GetFileName(symbolPath)} doesn't seem to be valid, will be ignored");
-                        continue;
-                    }
-
-                    // Check if the symbol itself and the timeline is null
-                    if (symbol is null || symbol.Timeline is null)
-                    {
-                        retrieveSymbols?.RemoveOne();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Could not find properly elements in symbol {Path.GetFileName(symbolPath)}, will be ignored");
-                        continue;
-                    }
+                    
+                    XDocument symbolDocument = XDocument.Load(symbolPath);
+                    using var documentReader = symbolDocument.CreateReader();
+                    symbol = (SymbolItem?)SymbolItem.serializer.Deserialize(documentReader);
 
                     AllSymbolPaths.Add(symbolPath);
-                    SymbolList.Add(symbol);
+                    SymbolList.Add(symbol!);
                     retrieveSymbols?.AddOne();
                 }
 

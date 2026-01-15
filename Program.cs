@@ -7,7 +7,6 @@ namespace HelperFunctions
 {
     public class Program
     {
-
         public static void Main()
         {
             Console.Clear();
@@ -18,25 +17,10 @@ namespace HelperFunctions
             PrintDashedLine();
             Console.WriteLine();
 
-            var assembly = Assembly.GetExecutingAssembly();
-            string functionsFileName = "HelperFunctions.Functions.json";
-            JsonNode? FunctionsJson;
-            using (Stream stream = assembly.GetManifestResourceStream(functionsFileName)!)
-            {
-                if (stream is null)
-                {
-                    Console.WriteLine("Error reading Functions.json");
-                    return;
-                }
-                using StreamReader reader = new(stream);
-                FunctionsJson = UM.ReadFileJson(reader!.ReadToEnd()!)!;
-                if (FunctionsJson is null)
-                {
-                    Console.WriteLine("Could not read Functions.json");
-                    return;
-                }
-            }
-            var functionsList = DisplayOptions(FunctionsJson!);
+            JsonNode? functionsJson = GetFileInLibrary("HelperFunctions.Functions.json");
+            if (functionsJson is null) return;
+
+            var functionsList = DisplayOptions(functionsJson!);
             Console.ForegroundColor = ConsoleColor.White;
             var selectedFunction = AskWhichFunction(functionsList);
 
@@ -88,10 +72,32 @@ namespace HelperFunctions
 
             PrintDashedLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Finished");
+            Console.Write("Finished ");
             Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.Write(" (press enter to exit)");
+            Console.Write("(press enter to exit)");
             Console.ReadLine();
+        }
+
+        public static JsonNode? GetFileInLibrary(string fileName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            JsonNode? FunctionsJson;
+            using (Stream stream = assembly.GetManifestResourceStream(fileName)!)
+            {
+                if (stream is null)
+                {
+                    Console.WriteLine($"Error reading {fileName}");
+                    return null;
+                }
+                using StreamReader reader = new(stream);
+                FunctionsJson = UM.ReadFileJson(reader!.ReadToEnd()!)!;
+                if (FunctionsJson is null)
+                {
+                    Console.WriteLine($"Could not read {fileName}");
+                    return null;
+                }
+            }
+            return FunctionsJson;
         }
 
         private static List<HelperFunction> DisplayOptions(JsonNode FunctionsJson)

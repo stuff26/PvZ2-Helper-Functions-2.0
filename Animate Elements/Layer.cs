@@ -12,7 +12,7 @@ namespace XflComponents
     public class AnimateLayer
     {
         [XmlIgnore]
-        public static readonly string defaultColor = "#4F4FFF";
+        public static readonly string DefaultColor = "#4F4FFF";
         // Strings
         [XmlAttribute]
         public string name { get; set; } = "";
@@ -52,7 +52,7 @@ namespace XflComponents
         // Lists
         [XmlArray("frames", Namespace = "http://ns.adobe.com/xfl/2008/")]
         [XmlArrayItem("DOMFrame", Namespace = "http://ns.adobe.com/xfl/2008/")]
-        public List<AnimateFrame>? Frames { get; set; }
+        public List<AnimateFrame> Frames { get; set; } = [];
 
         public override string ToString()
         {
@@ -74,16 +74,15 @@ namespace XflComponents
         /// <returns>True if there is at least one frame, otherwise false</returns>
         public bool HasFrames()
         {
-            return Frames?.Count > 0;
+            return Frames.Count > 0;
         }
 
         /// <summary>
         /// Gets the number of frames in a layer
         /// </summary>
-        /// <returns>The number of frames there are, returns 0 if none are found</returns>
+        /// <returns>The number of frames there are</returns>
         public int GetNumOfFrames()
         {
-            if (Frames is null) return 0;
             return Frames.Count;
         }
 
@@ -93,12 +92,12 @@ namespace XflComponents
         /// <returns>The length of the layer</returns>
         public int GetLayerLength()
         {
-            if (Frames is null || Frames.Count == 0)
+            if (Frames.Count == 0)
             {
                 return 0;
             }
 
-            var lastFrame = Frames[^1];
+            var lastFrame = Frames[^1]; 
             int lastIndex = lastFrame.index;
             int lastIndexDuration = lastFrame.duration;
 
@@ -111,7 +110,6 @@ namespace XflComponents
         /// <returns>A list of frame elements that exist in the layer</returns>
         public List<FrameElements> GetAllFrameElements()
         {
-            if (Frames is null) return [];
             var AllElements = new List<FrameElements>();
             foreach (AnimateFrame? frame in Frames)
             {
@@ -128,25 +126,26 @@ namespace XflComponents
         /// </summary>
         /// <param name="uniqueNames">If true, the returned list will not contain any duplicates</param>
         /// <returns>A string list of every library item</returns>
-        public List<string> GetAllLibraryItems(bool uniqueNames = true)
+        public List<string> GetAllLibraryItems(bool unique = true)
         {
-            List<string> AllLibraryItems = [];
-            if (Frames is null) return AllLibraryItems;
+            List<string> allLibraryItems = [];
+            HashSet<string> uniqueLibraryItems = [];
 
-            foreach (AnimateFrame? loopFrame in Frames)
+            foreach (AnimateFrame? currentFrame in Frames)
             {
-                List<string> LoopLibraryItems = loopFrame.GetAllLibraryItems();
-
-                foreach (string libraryItemName in LoopLibraryItems)
+                List<string> loopLibraryItems = currentFrame.GetAllLibraryItems();
+                foreach (string libraryItemName in loopLibraryItems)
                 {
-                    AllLibraryItems.Add(libraryItemName);
+                    if (unique)
+                        uniqueLibraryItems.Add(libraryItemName);
+                    else
+                        allLibraryItems.Add(libraryItemName);
                 }
             }
-            if (uniqueNames)
-            {
-                AllLibraryItems = AllLibraryItems.Distinct().ToList();
-            }
-            return AllLibraryItems;
+            if (unique)
+                return uniqueLibraryItems.ToList();
+            else
+                return allLibraryItems;
         }
 
         /// <summary>
@@ -155,8 +154,8 @@ namespace XflComponents
         /// <returns>The first library item found in the layer</returns>
         public string GetMainLibraryItem()
         {
-            var LibraryItems = GetAllLibraryItems();
-            if (LibraryItems.Count > 0) return LibraryItems[0];
+            var libraryItems = GetAllLibraryItems();
+            if (libraryItems.Count > 0) return libraryItems[0];
             else return "";
         }
 
@@ -166,19 +165,18 @@ namespace XflComponents
         /// <returns>A string list consisting of every action frame in the layer</returns>
         public List<string> GetActions()
         {
-            var FoundActions = new List<string>();
-            if (Frames is null) return FoundActions;
+            List<string> foundActions = [];
 
             foreach (var frame in Frames)
             {
                 if (frame.Actionscript is not null)
                 {
                     var actionScripts = frame.GetActionScripts();
-                    FoundActions.AddRange(actionScripts);
+                    foundActions.AddRange(actionScripts);
                 }
             }
 
-            return FoundActions;
+            return foundActions;
         }
 
         /// <summary>
@@ -187,7 +185,6 @@ namespace XflComponents
         /// <returns>True if there elements are found, otherwise false</returns>
         public bool HasFrameElements()
         {
-            if (Frames is null) return false;
             foreach (var frame in Frames)
             {
                 if (frame?.Elements?.Count > 0)
@@ -204,7 +201,6 @@ namespace XflComponents
         /// <returns>True if there are actiosn found, otherwise false</returns>
         public bool HasActions()
         {
-            if (Frames is null) return false;
             foreach (var frame in Frames)
             {
                 if (frame?.Actionscript is not null)
@@ -221,7 +217,6 @@ namespace XflComponents
         /// <returns>True if any labels are found, otherwise false</returns>
         public bool HasLabels()
         {
-            if (Frames is null) return false;
             foreach (var frame in Frames)
             {
                 if (!string.IsNullOrEmpty(frame.labelType) || !string.IsNullOrEmpty(frame.name))
@@ -233,13 +228,11 @@ namespace XflComponents
         }
 
         /// <summary>
-        /// Move every frame's index by a certain amount
+        /// Move every frame's index forward by a certain amount by mutating
         /// </summary>
         /// <param name="amount">Amount of frames to move everything by</param>
         public void MoveFrames(int amount)
         {
-            if (Frames is null) return;
-
             foreach (var frame in Frames)
             {
                 frame.index += amount;
@@ -309,7 +302,6 @@ namespace XflComponents
         /// </summary>
         public void RemoveTrailingFrames()
         {
-            if (Frames is null) return;
             for (int frameIndex = Frames!.Count - 1; frameIndex >= 0; frameIndex--)
             {
                 var currentFrame = Frames[frameIndex];
@@ -322,6 +314,23 @@ namespace XflComponents
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks through all frames in the layer and mutates and removes ones that have a duration of less than 0
+        /// </summary>
+        public void RemoveZeroDurationFrames()
+        {
+            List<AnimateFrame> newFrameList = [];
+            foreach (var frame in Frames)
+            {
+                if (frame.duration > 0) // Only add ones that have a duration of above 0
+                {
+                    newFrameList.Add(frame);
+                }
+            }
+
+            Frames = newFrameList;
         }
     }
 }

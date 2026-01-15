@@ -1,7 +1,6 @@
 using System.Data;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 using UniversalMethods;
 
 namespace HelperFunctions.Functions.Packages
@@ -12,16 +11,21 @@ namespace HelperFunctions.Functions.Packages
             ["ZombieTypes.json", "PlantTypes.json", "GridItemTypes.json",
             "LevelModules.json", "GameFeatures.json", "CreatureTypes.json",
             "CollectableTypes.json"];
-        private static readonly string levelCheckingGuideDir = @"C:\Users\zacha\Documents\Coding Stuff\Helper Functions Remake\HelperFunctions\Functions\Packages\LevelCheckingGuide.json";
-        private static readonly string packagesDir = @"C:\Users\zacha\Documents\Coding Stuff\packages";
-        private static readonly string leveldir = @"C:\Users\zacha\Documents\Coding Stuff\Helper Functions Remake\HelperFunctions\BEACH1.json";
+        private static readonly string levelCheckingGuideDir = @"HelperFunctions.LevelCheckingGuide.json";
         private static Dictionary<string, (string fileName, List<string> codenames)>? codenamesDirectory;
 
         public static void Function()
         {
-            var packagesDictionary = GetPackagesFiles();
-            var level = UM.GetJsonFile(leveldir)!;
-            var levelCheckingGuideFile = UM.GetJsonFile(levelCheckingGuideDir)!;
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("Enter the level file you want to scan");
+            var level = UM.AskForJsonFile().jsonFile!;
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("Enter the packages directory you want to scan with");
+            var packagesDir = UM.AskForDirectory(wantedFiles);
+            var packagesDictionary = GetPackagesFiles(packagesDir);
+            
+            var levelCheckingGuideFile = Program.GetFileInLibrary(levelCheckingGuideDir)!;
             var levelCheckingGuide = levelCheckingGuideFile["CheckingGuides"]!;
             var childClasses = levelCheckingGuideFile["ChildClasses"]!;
             var childClassesDictionary = MakeChildClasses(childClasses);
@@ -42,7 +46,9 @@ namespace HelperFunctions.Functions.Packages
                 {"collectabletype", ("CollectableTypes.json", GetNamesFromFiles(packagesDictionary["CollectableTypes"], "typename"))}
             };
 
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             // Loop through every level object in level file
+            var oldCursorPosition = Console.GetCursorPosition().Top;
             foreach (var levelObject in level["objects"]!.AsArray())
             {
                 // Check that the object has a class and data, continue to next if not
@@ -80,9 +86,14 @@ namespace HelperFunctions.Functions.Packages
                     }
                 }
             }
+            if (oldCursorPosition == Console.GetCursorPosition().Top)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("No errors found");
+            }
         }
 
-        private static Dictionary<string, JsonNode> GetPackagesFiles()
+        private static Dictionary<string, JsonNode> GetPackagesFiles(string packagesDir)
         {
 
             Dictionary<string, JsonNode> fileList = [];

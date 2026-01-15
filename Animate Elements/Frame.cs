@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
 using System.Xml;
-using System.IO.Pipelines;
 
 namespace XflComponents
 {
@@ -234,7 +233,7 @@ namespace XflComponents
         /// <returns>True if the amount of elements exceeds 1, otherwise false</returns>
         public bool HasMultipleElements()
         {
-            return Elements is not null && Elements.Count > 1;
+            return Elements.Count > 1;
         }
 
         /// <summary>
@@ -243,10 +242,6 @@ namespace XflComponents
         /// <returns>True if multiple element types are found, otherwise false</returns>
         public bool HasMultipleElementTypes()
         {
-            if (Elements is null)
-            {
-                return false;
-            }
             Type? firstElementType = null;
             bool firstLoop = true;
             foreach (FrameElements element in Elements)
@@ -271,19 +266,18 @@ namespace XflComponents
         /// <returns>List of strings that contain every library item used, returns empty list if none are found</returns>
         public List<string> GetAllLibraryItems()
         {
-            if (Elements is null || Elements.Count == 0) return [];
-            List<string>? AllLibraryItems = [];
+            HashSet<string>? allLibraryItems = [];
 
             foreach (FrameElements loopElement in Elements)
             {
                 string? loopLibraryItemName = loopElement.libraryItemName;
                 if (loopLibraryItemName is not null)
                 {
-                    AllLibraryItems.Add(loopLibraryItemName);
+                    allLibraryItems.Add(loopLibraryItemName);
                 }
             }
 
-            return AllLibraryItems.Distinct().ToList();
+            return allLibraryItems.ToList();
         }
 
         /// <summary>
@@ -292,18 +286,28 @@ namespace XflComponents
         /// <returns>The name of the first library item used, or an empty string if none are found</returns>
         public string GetMainLibraryItem()
         {
-            if (Elements is null || Elements.Count == 0) return "";
-            return Elements[0].libraryItemName;
+            return Elements[0].libraryItemName ?? "";
         }
 
         /// <summary>
         /// Gets all of the action scripts the frame may have
         /// </summary>
         /// <returns>All of the actions scripts in the frame, return empty list if none are found</returns>
-        public List<string> GetActionScripts()
+        public List<string> GetActionScripts(bool splitLines = false)
         {
             if (Actionscript is null) return [];
-            return Actionscript.GetScripts();
+            var actionScripts = Actionscript.GetScripts();
+            if (splitLines)
+            {
+                List<string> splitActionScripts = [];
+                foreach (var actionScript in actionScripts)
+                {
+                    splitActionScripts.AddRange(actionScript.Split("\n"));
+                }
+                return splitActionScripts;
+            }
+            
+            return actionScripts;
         }
 
         /// <summary>
@@ -317,16 +321,14 @@ namespace XflComponents
 
         public bool HasTransformations()
         {
-            if (Elements is null) return false;
-
             foreach (var element in Elements)
             {
                 var matrix = element.Matrix;
                 if (matrix is null) continue;
-                List<double?> values = [matrix.a, matrix.b, matrix.c, matrix.c];
+                List<double?> values = [matrix.a, matrix.b, matrix.c, matrix.d];
                 foreach (var value in values)
                 {
-                    if (value is not null || value != 0.0)
+                    if (value != null && value != 0.0)
                     {
                         return true;
                     }

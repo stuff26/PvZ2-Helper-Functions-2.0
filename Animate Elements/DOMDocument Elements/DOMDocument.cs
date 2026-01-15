@@ -385,6 +385,28 @@ namespace XflComponents
             }
             SymbolItemList = NewSymbolItemList!;
         }
+        /// <summary>
+        /// Removes a bitmap item from the DOMDocument
+        /// </summary>
+        /// <param name="name"> Bitmap name to be removed, include folders but not ".png" (unless "includesEnd" is "true")</param>
+        /// <param name="includesEnd">Put "true" if the end of each symbol item name includes ".png"</param>
+        public void RemoveBitmapItem(string name, bool includesEnd = true)
+        {
+            if (BitmapItemList is null) return;
+
+            var NewBitmapItemList = new List<DOMBitmapItem>();
+            foreach (var BitmapItem in BitmapItemList)
+            {
+                var nameToFind = BitmapItem!.href!;
+                if (includesEnd) nameToFind = nameToFind.Replace(".png", "");
+                if (!(nameToFind == name)) // If name does not equate to provided name, skip it
+                {
+                    NewBitmapItemList.Add(BitmapItem);
+                }
+            }
+
+            BitmapItemList = NewBitmapItemList!;
+        }
 
         /// <summary>
         /// Add a new folder item to the DOMDocument
