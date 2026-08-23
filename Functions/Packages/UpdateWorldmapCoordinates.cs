@@ -3,20 +3,20 @@ using UniversalMethods;
 
 namespace HelperFunctions.Functions.Packages
 {
-    public class UpdateWorldmapCoordinates
+    public static class UpdateWorldmapCoordinates
     {
         public static void Function()
         {
             // Get JSON file, path to file, and how much to change the x and y coordinate by
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("Enter the worldmap file you want to edit");
-            var (mapFile, mapPath) = UM.AskForJsonFile();
+            var (mapFile, mapPath) = UserPrompts.AskForJsonFile();
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("Enter how much you want to change the X coordinate by");
-            var xChange = UM.AskForDouble();
+            var xChange = UserPrompts.AskForDouble();
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("Enter how much you want to change the Y coordinate by");
-            var yChange = UM.AskForDouble();
+            var yChange = UserPrompts.AskForDouble();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("Processing files...");
             var mapData = mapFile!["objects"]![0]!["objdata"]!;
@@ -43,7 +43,7 @@ namespace HelperFunctions.Functions.Packages
             }
 
             // Write to file
-            UM.WriteJsonFile(mapPath, mapFile);
+            JsonMethods.WriteJsonFile(mapPath, mapFile);
             ProgressChecker.WriteFinished();
         }
     }

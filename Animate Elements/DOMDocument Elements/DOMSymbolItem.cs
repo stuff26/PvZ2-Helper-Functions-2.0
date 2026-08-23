@@ -4,29 +4,30 @@ using System.Xml;
 namespace XflComponents
 {
     [XmlRoot("Include", Namespace = "http://ns.adobe.com/xfl/2008/")]
-    public class DOMSymbolItem
+    public sealed class DOMSymbolItem()
     {
-        [XmlAttribute]
-        public string? href { get; set; }
-        [XmlAttribute]
-        public string? itemIcon { get; set; }
-        [XmlAttribute]
-        public string? loadImmediate { get; set; }
-        [XmlAttribute]
-        public string? itemID { get; set; }
-        [XmlAttribute]
-        public string? lastModified { get; set; }
+        [XmlAttribute("href")]
+        public string Href { get; set; } = string.Empty;
+        [XmlAttribute("itemIcon")]
+        public string? ItemIcon { get; set; }
+        [XmlAttribute("loadImmediate")]
+        public string? LoadImmediate { get; set; }
+        [XmlAttribute("itemID")]
+        public string? ItemID { get; set; }
+        [XmlAttribute("lastModified")]
+        public string? LastModified { get; set; }
+
+        public bool ShouldSerializeHref() => !string.IsNullOrWhiteSpace(Href);
 
         /// <summary>
         /// Get the root name of the symbol file used
         /// </summary>
         /// <returns>The root symbol file name</returns>
-        public string? GetEndSymbolFile()
+        public string? GetEndSymbolFile() => Path.GetFileNameWithoutExtension(Href) ?? string.Empty;
+
+        public override string ToString()
         {
-            if (href is null) return null;
-            string[] splitString = href.Split("/");
-            string tempString = splitString[^1];
-            return tempString.Replace(".xml", "");
+            return $"DOMSymbolItem named {Href}";
         }
     }
 }

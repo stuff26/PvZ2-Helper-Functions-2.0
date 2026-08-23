@@ -1,35 +1,33 @@
-using System.Data;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using UniversalMethods;
 
 namespace HelperFunctions.Functions.Packages
 {
-    public class CheckLevelErrors
+    public static class CheckLevelErrors
     {
         private static readonly string[] wantedFiles =
             ["ZombieTypes.json", "PlantTypes.json", "GridItemTypes.json",
             "LevelModules.json", "GameFeatures.json", "CreatureTypes.json",
             "CollectableTypes.json"];
-        private static readonly string levelCheckingGuideDir = @"HelperFunctions.LevelCheckingGuide.json";
+        private static readonly string levelCheckingGuideDir = "HelperFunctions.LevelCheckingGuide.json";
         private static Dictionary<string, (string fileName, List<string> codenames)>? codenamesDirectory;
 
         public static void Function()
         {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("Enter the level file you want to scan");
-            var level = UM.AskForJsonFile().jsonFile!;
+            var level = UserPrompts.AskForJsonDocumentFile().jsonFile!.RootElement;
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("Enter the packages directory you want to scan with");
-            var packagesDir = UM.AskForDirectory(wantedFiles);
+            var packagesDir = UserPrompts.AskForDirectory(wantedFiles);
             var packagesDictionary = GetPackagesFiles(packagesDir);
             
-            var levelCheckingGuideFile = Program.GetFileInLibrary(levelCheckingGuideDir)!;
-            var levelCheckingGuide = levelCheckingGuideFile["CheckingGuides"]!;
-            var childClasses = levelCheckingGuideFile["ChildClasses"]!;
+            var levelCheckingGuideFile = Program.GetJsonDocumentFileInLibrary(levelCheckingGuideDir)!.RootElement;
+            var levelCheckingGuide = levelCheckingGuideFile.GetProperty("CheckingGuides")!;
+            var childClasses = levelCheckingGuideFile.GetProperty("ChildClasses")!;
             var childClassesDictionary = MakeChildClasses(childClasses);
-            var addedObjectDefinitions = UM.GetKeysFromJsonNode(levelCheckingGuide);
+            var addedObjectDefinitions = JsonMethods.GetKeysFromJsonElement(levelCheckingGuide);
 
             codenamesDirectory = new()
             {
@@ -49,73 +47,71 @@ namespace HelperFunctions.Functions.Packages
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             // Loop through every level object in level file
             var oldCursorPosition = Console.GetCursorPosition().Top;
-            foreach (var levelObject in level["objects"]!.AsArray())
+            foreach (var levelObject in level.GetProperty("objects")!.EnumerateArray())
             {
                 // Check that the object has a class and data, continue to next if not
-                if (levelObject is null || !levelObject.AsObject().ContainsKey("objclass")
-                || !levelObject.AsObject().ContainsKey("objdata")) continue;
-                var objclass = (string)levelObject["objclass"]!.AsValue()!;
-                var objdata = levelObject["objdata"]!;
+                if (!levelObject.TryGetProperty("objclass", out var objclassElement)
+                || !levelObject.TryGetProperty("objdata", out var objdata)) continue;
+
+                var objclass = objclassElement.GetString()!;
 
                 // Check if the class is a child class and continue if no guide is found
-                if (childClassesDictionary.TryGetValue(objclass, out string? value))
+                if (childClassesDictionary.TryGetValue(objclass!, out string? value))
                 {
                     objclass = value;
                 }
-                else if (!addedObjectDefinitions.Contains(objclass)) continue;
+                else if (!addedObjectDefinitions.Contains(objclass!)) continue;
 
-                var allCheckingGuides = UM.GetKeysFromJsonNode(levelCheckingGuide[objclass]);
-                var currentCheckingGuide = levelCheckingGuide[objclass]!;
+                var allCheckingGuides = JsonMethods.GetKeysFromJsonElement(levelCheckingGuide.GetProperty(objclass!));
+                var currentCheckingGuide = levelCheckingGuide.GetProperty(objclass)!;
                 foreach (var checkingGuide in allCheckingGuides)
                 {
-                    if (!objdata.AsObject().ContainsKey(checkingGuide)) continue; // If key is not found, skip
-                    var keyCheckingGuide = currentCheckingGuide[checkingGuide]!;
+                    if (!objdata.TryGetProperty(checkingGuide, out _)) continue; // If key is not found, skip
+                    var keyCheckingGuide = currentCheckingGuide.GetProperty(checkingGuide)!;
                     try
                     {
                         var checkingSteps = keyCheckingGuide.Deserialize<List<string>>()!;
-                        CheckLevelObject(objdata[checkingGuide]!, checkingSteps);
+                        CheckLevelObject(objdata.GetProperty(checkingGuide)!, checkingSteps);
                     }
                     catch (JsonException)
                     {
-                        var checkingStepsArray = keyCheckingGuide.AsArray();
-                        foreach (var checkingStep in checkingStepsArray)
+                        foreach (var checkingStep in keyCheckingGuide.EnumerateArray())
                         {
                             var currentCheckingStep = checkingStep.Deserialize<List<string>>()!;
-                            CheckLevelObject(objdata[checkingGuide]!, currentCheckingStep);
+                            CheckLevelObject(objdata.GetProperty(checkingGuide)!, currentCheckingStep);
                         }
                     }
                 }
             }
             if (oldCursorPosition == Console.GetCursorPosition().Top)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("No errors found");
+                UM.PrintColoredText(ConsoleColor.Yellow, "No errors found", separateLines:true);
             }
         }
 
-        private static Dictionary<string, JsonNode> GetPackagesFiles(string packagesDir)
+        private static Dictionary<string, JsonElement> GetPackagesFiles(string packagesDir)
         {
 
-            Dictionary<string, JsonNode> fileList = [];
+            Dictionary<string, JsonElement> fileList = [];
             foreach (var wantedFile in wantedFiles)
             {
-                JsonNode filetoAdd = UM.GetJsonFile($@"{packagesDir}\{wantedFile}")!;
-                fileList[wantedFile.Replace(".json", "")] = filetoAdd;
+                JsonDocument filetoAdd = JsonMethods.GetJsonDocmentFile($@"{packagesDir}\{wantedFile}")!;
+                fileList.Add(wantedFile.Replace(".json", string.Empty), filetoAdd.RootElement);
             }
 
             return fileList;
         }
 
-        private static Dictionary<string, string> MakeChildClasses(JsonNode childClasses)
+        private static Dictionary<string, string> MakeChildClasses(JsonElement childClasses)
         {
             var childClassesDictionary = new Dictionary<string, string>();
-            var parentClasses = UM.GetKeysFromJsonNode(childClasses);
+            var parentClasses = JsonMethods.GetKeysFromJsonElement(childClasses);
             foreach (var parentClass in parentClasses)
             {
-                var tempChildClasses = childClasses[parentClass]!.AsArray();
-                foreach (var childClass in tempChildClasses)
+                var tempChildClasses = childClasses.GetProperty(parentClass)!;
+                foreach (var childClass in tempChildClasses.EnumerateArray())
                 {
-                    var childClassName = (string)childClass!.AsValue()!;
+                    var childClassName = childClass!.GetString()!;
                     childClassesDictionary.Add(childClassName, parentClass);
                 }
             }
@@ -123,28 +119,28 @@ namespace HelperFunctions.Functions.Packages
             return childClassesDictionary;
         }
 
-        private static List<string> GetNamesFromFiles(JsonNode fileNode, string typeToGet, string misc = "")
+        private static List<string> GetNamesFromFiles(JsonElement fileNode, string typeToGet, string misc = "")
         {
             List<string> toReturn = [];
-            foreach (var nodeObject in fileNode["objects"]!.AsArray())
+            foreach (var nodeObject in fileNode.GetProperty("objects")!.EnumerateArray())
             {
                 if (typeToGet == "alias")
                 {
-                    if (nodeObject!.AsObject().ContainsKey("aliases"))
+                    if (nodeObject!.TryGetProperty("aliases", out var aliasesElement))
                     {
-                        var aliases = nodeObject["aliases"]!.AsArray();
+                        var aliases = aliasesElement.EnumerateArray();
                         foreach (var alias in aliases)
                         {
-                            toReturn.Add((string)alias!.AsValue()!);
+                            toReturn.Add(alias!.GetString()!);
                         }
                     }
                 }
                 if (typeToGet == "typename")
                 {
-                    if (nodeObject!.AsObject().ContainsKey("objdata")
-                    && nodeObject["objdata"]!.AsObject().ContainsKey("TypeName"))
+                    if (nodeObject!.TryGetProperty("objdata", out _)
+                    && nodeObject.GetProperty("objdata")!.TryGetProperty("TypeName", out var typenameElement))
                     {
-                        var typename = (string)nodeObject["objdata"]!["TypeName"]!.AsValue()!;
+                        var typename = typenameElement.GetString()!;
                         if (misc == "dino") typename = typename[4..];
                         toReturn.Add(typename);
                     }
@@ -152,10 +148,10 @@ namespace HelperFunctions.Functions.Packages
                 ;
                 if (typeToGet == "feature")
                 {
-                    if (nodeObject!.AsObject().ContainsKey("objdata")
-                    && nodeObject["objdata"]!.AsObject().ContainsKey("Feature"))
+                    if (nodeObject!.TryGetProperty("objdata", out _)
+                    && nodeObject.GetProperty("objdata")!.TryGetProperty("Feature", out var featureElement))
                     {
-                        var feature = (string)nodeObject["objdata"]!["Feature"]!.AsValue()!;
+                        var feature = featureElement.GetString()!;
                         toReturn.Add(feature);
                     }
                 }
@@ -164,14 +160,14 @@ namespace HelperFunctions.Functions.Packages
             return toReturn;
         }
     
-        private static void CheckLevelObject(JsonNode jsonObject, List<string> currentCheckingGuide)
+        private static void CheckLevelObject(JsonElement jsonObject, List<string> currentCheckingGuide)
         {
             var currentStep = currentCheckingGuide[0];
             currentCheckingGuide.RemoveAt(0);
             if (currentStep.StartsWith("check"))
             {
                 var checkingSettings = currentStep.Split("_").ToList();
-                var foundValue = jsonObject.GetValue<string>();
+                var foundValue = jsonObject.GetString()!;
                 var toCompareTo = checkingSettings[1];
                 if (currentStep.Contains("_ref"))
                 {
@@ -201,8 +197,7 @@ namespace HelperFunctions.Functions.Packages
             }
             if (currentStep == "loop")
             {
-                var currentArray = jsonObject.AsArray();
-                foreach (var value in currentArray)
+                foreach (var value in jsonObject.EnumerateArray())
                 {
                     CheckLevelObject(value!, currentCheckingGuide.ToList());
                 }
@@ -210,8 +205,8 @@ namespace HelperFunctions.Functions.Packages
             if (currentStep.StartsWith('$'))
             {
                 var keyToCheck = currentStep[1..]; // Remove "$"
-                if (!jsonObject.AsObject().ContainsKey(keyToCheck)) return; // If the key is not found, exit out to prevent errors
-                CheckLevelObject(jsonObject[keyToCheck]!, currentCheckingGuide);
+                if (!jsonObject.TryGetProperty(keyToCheck, out var data)) return; // If the key is not found, exit out to prevent errors
+                CheckLevelObject(data!, currentCheckingGuide);
             }
         }
     }

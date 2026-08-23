@@ -1,4 +1,6 @@
 
+using UniversalMethods;
+
 namespace HelperFunctions
 {
     public class ProgressChecker
@@ -15,9 +17,20 @@ namespace HelperFunctions
             ConsoleHeight = Console.GetCursorPosition().Top;
             MaxCount = maxCount;
             CurrentAmount = 0; NumErrors = 0;
-            Console.Write($"{message}");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            if (!message.EndsWith(' '))
+            {
+                message += " ";
+                CursorPosition++;
+            }
+            UM.PrintColoredText(ConsoleColor.Green, message);
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write($"{CurrentAmount}/{MaxCount}");
+            if (maxCount == 0)
+            {
+                UM.PrintColoredText(ConsoleColor.Yellow, $"{CurrentAmount}/{MaxCount}", separateLines:true);
+            }
+            else UM.PrintColoredText(ConsoleColor.White, $"{CurrentAmount}/{MaxCount}");
         }
 
         private void AdjustPosition()
@@ -66,24 +79,19 @@ namespace HelperFunctions
         {
             AdjustPosition();
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{CurrentAmount}/{MaxCount}");
+            UM.PrintColoredText(ConsoleColor.Red, $"{CurrentAmount}/{MaxCount}", separateLines:true);
             Console.ForegroundColor = ConsoleColor.White;
         }
 
         public static void WriteFinished(bool newLine = true)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            if (newLine)
-                Console.WriteLine("Finished");
-            else
-                Console.Write("Finished");
+            UM.PrintColoredText(ConsoleColor.Yellow, "Finished", separateLines:newLine);
             Console.ForegroundColor = ConsoleColor.White;
         }
 
         public static void WriteError()
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Error");
+            UM.PrintColoredText(ConsoleColor.Red, "Error");
             Console.ForegroundColor = ConsoleColor.White;
         }
     }

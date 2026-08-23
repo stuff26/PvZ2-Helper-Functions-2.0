@@ -3,13 +3,13 @@ using UniversalMethods;
 
 namespace HelperFunctions.Functions.Packages
 {
-    public class RemakeObbDataJson
+    public static class RemakeObbDataJson
     {
         public static void Function()
         {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("Enter an obb folder");
-            var filePath = UM.AskForDirectory(["data.json"], ["packet"]);
+            var filePath = UserPrompts.AskForDirectory(["data.json"], ["packet"]);
             var datajsonPath = Path.Join(filePath, "data.json");
             var packagesPath = Path.Join(filePath, "packet");
 
@@ -27,7 +27,7 @@ namespace HelperFunctions.Functions.Packages
                 // If the file ends in .scg, add it
                 if (fileDir.EndsWith(".scg"))
                 {
-                    var toAddFileName = Path.GetFileName(fileDir)!.Replace(".scg", "");
+                    var toAddFileName = Path.GetFileName(fileDir)!.Replace(".scg", string.Empty);
                     newFileList.Add(toAddFileName);
                 }
             }
@@ -35,9 +35,9 @@ namespace HelperFunctions.Functions.Packages
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("Writing data.json...");
-            var datajsonFile = UM.GetJsonFile(datajsonPath)!;
+            var datajsonFile = JsonMethods.GetJsonFile(datajsonPath)!;
             datajsonFile["packet"] = new JsonArray([.. newFileList.Select(n => JsonValue.Create(n))]);
-            UM.WriteJsonFile(datajsonPath, datajsonFile);
+            JsonMethods.WriteJsonFile(datajsonPath, datajsonFile);
             ProgressChecker.WriteFinished();
         }
     }

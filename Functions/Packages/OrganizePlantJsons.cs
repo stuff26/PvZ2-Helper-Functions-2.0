@@ -4,44 +4,37 @@ using UniversalMethods;
 
 namespace HelperFunctions.Functions.Packages
 {
-    public class OrganizePlantJsons
+    public static class OrganizePlantJsons
     {
         private static readonly string[] wantedFiles =
         ["PropertySheets.json", "PlantTypes.json", "PlantProperties.json", "PlantLevels.json", "Powers.json"];
 
         public static void Function()
         {
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.WriteLine("Enter the packages folder you want to edit");
-            string packagesDir = UM.AskForDirectory(wantedFiles);
+            UM.PrintColoredText(ConsoleColor.DarkCyan, "Enter the packages folder you want to edit", separateLines:true);
+            string packagesDir = UserPrompts.AskForDirectory(wantedFiles);
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Retrieving files... ");
+            UM.PrintColoredText(ConsoleColor.Green, "Retrieving files... ");
             var fileList = GetNeededFiles(packagesDir)!;
             ProgressChecker.WriteFinished();
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Getting plant order... ");
+            UM.PrintColoredText(ConsoleColor.Green, "Getting plant order... ");
             var plantList = GetPlantOrder(fileList["PropertySheets"]!);
             ProgressChecker.WriteFinished();
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Organizing PlantTypes... ");
+            UM.PrintColoredText(ConsoleColor.Green, "Organizing PlantTypes... ");
             var propertyList = OrganizePlantTypes(fileList["PlantTypes"]!, plantList);
             ProgressChecker.WriteFinished();
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Organizing PlantProperties... ");
+            UM.PrintColoredText(ConsoleColor.Green, "Organizing PlantProperties... ");
             OrganizePlantProperties(fileList["PlantProperties"]!, propertyList);
             ProgressChecker.WriteFinished();
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Organizing PlantLevels... ");
+            UM.PrintColoredText(ConsoleColor.Green, "Organizing PlantLevels... ");
             var powerList = OrganizePlantLevels(fileList["PlantLevels"]!, plantList);
             ProgressChecker.WriteFinished();
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Organizing Powers... ");
+            UM.PrintColoredText(ConsoleColor.Green, "Organizing Powers... ");
             OrganizePowers(fileList["Powers"]!, powerList);
             ProgressChecker.WriteFinished();
 
@@ -51,7 +44,7 @@ namespace HelperFunctions.Functions.Packages
             {
                 if (filePair.Key != "PropertySheets") 
                 {
-                    UM.WriteJsonFile(Path.Join(packagesDir, $"{filePair.Key}.json"), filePair.Value);
+                    JsonMethods.WriteJsonFile(Path.Join(packagesDir, $"{filePair.Key}.json"), filePair.Value);
                     writeFiles.AddOne();
                 }
             }
@@ -62,8 +55,8 @@ namespace HelperFunctions.Functions.Packages
             Dictionary<string, JsonNode?> fileList = [];
             foreach (var wantedFile in wantedFiles)
             {
-                JsonNode filetoAdd = UM.GetJsonFile($@"{packagesDir}\{wantedFile}")!;
-                fileList[wantedFile.Replace(".json", "")] = filetoAdd;
+                JsonNode filetoAdd = JsonMethods.GetJsonFile($@"{packagesDir}\{wantedFile}")!;
+                fileList[wantedFile.Replace(".json", string.Empty)] = filetoAdd;
             }
 
             return fileList!;

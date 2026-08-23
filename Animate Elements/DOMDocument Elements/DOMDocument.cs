@@ -5,109 +5,151 @@ namespace XflComponents
 {
 
     [XmlRoot("DOMDocument", Namespace = "http://ns.adobe.com/xfl/2008/")]
-    public class DOMDocument
+    public sealed class DOMDocument
     {
         // Statics
         [XmlIgnore]
         public static readonly XmlSerializer serializer = new(typeof(DOMDocument));
 
-        [XmlAttribute]
-        public string? width { get; set; }
-        [XmlAttribute]
-        public string? height { get; set; }
+        [XmlAttribute("backgroundColor")]
+        public string? BackgroundColor {get; set;}
         [XmlAttribute("frameRate")]
-        public string? frameRateString { get; set; }
+        public string FrameRateString { get; set; } = "0";
         [XmlIgnore]
-        public int? frameRate
+        public int FrameRate
         {
             get
             {
-                if (string.IsNullOrEmpty(frameRateString)) return null;
-                int results;
-                if (!int.TryParse(frameRateString, out results)) return null;
+                if (string.IsNullOrEmpty(FrameRateString)
+                    || !int.TryParse(FrameRateString, out var results)) return 0;
                 return results;
             }
+            set
+            {
+                FrameRateString = value.ToString();
+            }
         }
-        [XmlAttribute]
-        public string? currentTimeline { get; set; }
-        [XmlAttribute]
-        public string? xflVersion { get; set; }
-        [XmlAttribute]
-        public string? creatorInfo { get; set; }
-        [XmlAttribute]
-        public string? platform { get; set; }
-        [XmlAttribute]
-        public string? versionInfo { get; set; }
-        [XmlAttribute]
-        public string? majorVersion { get; set; }
-        [XmlAttribute]
-        public string? buildNumber { get; set; }
-        [XmlAttribute]
-        public string? gridSpacingX { get; set; }
-        [XmlAttribute]
-        public string? gridSpacingY { get; set; }
-        [XmlAttribute]
-        public string? gridSnapAccuracy { get; set; }
-        [XmlAttribute]
-        public string? gridSnapTo { get; set; }
-        [XmlAttribute]
-        public string? guidesLocked { get; set; }
-        [XmlAttribute]
-        public string? gridVisible { get; set; }
-        [XmlAttribute]
-        public string? rulerVisible { get; set; }
-        [XmlAttribute]
-        public string? viewAngle3D { get; set; }
-        [XmlAttribute]
-        public string? vanishingPoint3DX { get; set; }
-        [XmlAttribute]
-        public string? vanishingPoint3DY { get; set; }
-        [XmlAttribute]
-        public string? nextSceneIdentifier { get; set; }
-        [XmlAttribute]
-        public string? playOptionsPlayLoop { get; set; }
-        [XmlAttribute]
-        public string? playOptionsPlayPages { get; set; }
-        [XmlAttribute]
-        public string? playOptionsPlayFrameActions { get; set; }
-        [XmlAttribute]
-        public string? autoSaveHasPrompted { get; set; }
-        [XmlAttribute]
-        public string? filetypeGUID { get; set; }
-        [XmlAttribute]
-        public string? fileGUID { get; set; }
+        [XmlAttribute("width")]
+        public string WidthString { get; set; } = DefaultSize.ToString();
+        [XmlIgnore]
+        public int Width
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(WidthString)
+                    || !int.TryParse(WidthString, out var results)) return DefaultSize;
+                return results;
+            }
+            set
+            {
+                WidthString = value.ToString();
+            }
+        }
+        [XmlAttribute("height")]
+        public string HeightString { get; set; } = DefaultSize.ToString();
+        [XmlIgnore]
+        public int Height
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(HeightString)
+                    || !int.TryParse(HeightString, out var results)) return DefaultSize;
+                return results;
+            }
+            set
+            {
+                HeightString = value.ToString();
+            }
+        }
+        [XmlAttribute("currentTimeline")]
+        public string? CurrentTimeline { get; set; }
+        [XmlAttribute("xflVersion")]
+        public string? XflVersion { get; set; }
+        [XmlAttribute("creatorInfo")]
+        public string? CreatorInfo { get; set; }
+        [XmlAttribute("platform")]
+        public string? Platform { get; set; }
+        [XmlAttribute("versionInfo")]
+        public string? VersionInfo { get; set; }
+        [XmlAttribute("majorVersion")]
+        public string? MajorVersion { get; set; }
+        [XmlAttribute("buildNumber")]
+        public string? BuildNumber { get; set; }
+        [XmlAttribute("gridSpacingX")]
+        public string? GridSpacingX { get; set; }
+        [XmlAttribute("gridSpacingY")]
+        public string? GridSpacingY { get; set; }
+        [XmlAttribute("gridSnapAccuracy")]
+        public string? GridSnapAccuracy { get; set; }
+        [XmlAttribute("gridSnapTo")]
+        public string? GridSnapTo { get; set; }
+        [XmlAttribute("guidesLocked")]
+        public string? GuidesLocked { get; set; }
+        [XmlAttribute("gridVisible")]
+        public string? GridVisible { get; set; }
+        [XmlAttribute("rulerVisible")]
+        public string? RulerVisible { get; set; }
+        [XmlAttribute("viewAngle3D")]
+        public string? ViewAngle3D { get; set; }
+        [XmlAttribute("vanishingPoint3DX")]
+        public string? VanishingPoint3DX { get; set; }
+        [XmlAttribute("vanishingPoint3DY")]
+        public string? VanishingPoint3DY { get; set; }
+        [XmlAttribute("nextSceneIdentifier")]
+        public string? NextSceneIdentifier { get; set; }
+        [XmlAttribute("playOptionsPlayLoop")]
+        public string? PlayOptionsPlayLoop { get; set; }
+        [XmlAttribute("playOptionsPlayPages")]
+        public string? PlayOptionsPlayPages { get; set; }
+        [XmlAttribute("playOptionsPlayFrameActions")]
+        public string? PlayOptionsPlayFrameActions { get; set; }
+        [XmlAttribute("autoSaveHasPrompted")]
+        public string? AutoSaveHasPrompted { get; set; }
+        [XmlAttribute("filetypeGUID")]
+        public string? FiletypeGUID { get; set; }
+        [XmlAttribute("fileGUID")]
+        public string? FileGUID { get; set; }
 
         [XmlArray("folders", Namespace = "http://ns.adobe.com/xfl/2008/")]
         [XmlArrayItem("DOMFolderItem", typeof(DOMFolder), Namespace = "http://ns.adobe.com/xfl/2008/")]
-        public List<DOMFolder?>? FolderList { get; set; }
+        public List<DOMFolder> FolderList { get; set; } = [];
 
         [XmlArray("media", Namespace = "http://ns.adobe.com/xfl/2008/")]
         [XmlArrayItem("DOMBitmapItem", typeof(DOMBitmapItem), Namespace = "http://ns.adobe.com/xfl/2008/")]
-        public List<DOMBitmapItem?>? BitmapItemList { get; set; }
+        public List<DOMBitmapItem> BitmapItemList { get; set; } = [];
 
         [XmlArray("symbols", Namespace = "http://ns.adobe.com/xfl/2008/")]
         [XmlArrayItem("Include", typeof(DOMSymbolItem), Namespace = "http://ns.adobe.com/xfl/2008/")]
-        public List<DOMSymbolItem?>? SymbolItemList { get; set; }
+        public List<DOMSymbolItem> SymbolItemList { get; set; } = [];
 
         [XmlArray("timelines", Namespace = "http://ns.adobe.com/xfl/2008/")]
         [XmlArrayItem("DOMTimeline", typeof(SymbolTimeline), Namespace = "http://ns.adobe.com/xfl/2008/")]
-        public required List<SymbolTimeline?> TimelineList { get; set; } = [];
+        public required List<SymbolTimeline> TimelineList { get; set; } = [];
 
         [XmlElement("scripts", Namespace = "http://ns.adobe.com/xfl/2008/")]
-        public object? scripts { get; set; }
+        public object? Scripts { get; set; }
 
         [XmlElement("PrinterSettings", Namespace = "http://ns.adobe.com/xfl/2008/")]
         public object? PrinterSettings { get; set; }
 
         [XmlArray("publishHistory", Namespace = "http://ns.adobe.com/xfl/2008/")]
         [XmlArrayItem("PublishItem", typeof(PublishItem), Namespace = "http://ns.adobe.com/xfl/2008/")]
-        public List<PublishItem>? publishHistory { get; set; }
+        public List<PublishItem> PublishHistory { get; set; } = [];
 
         [XmlElement("SaveCustomEase", Namespace = "http://ns.adobe.com/xfl/2008/")]
-        public List<SaveCustomEase>? CustomEases { get; set; }
+        public List<SaveCustomEase> CustomEases { get; set; } = [];
+
+        public bool ShouldSerializeFolderList() => FolderList.Count > 0;
+        public bool ShouldSerializeBitmapItemList() => BitmapItemList.Count > 0;
+        public bool ShoudlSerializeSymbolItemList() => SymbolItemList.Count > 0;
+        public bool ShouldSerializePublishHistory() => PublishHistory.Count > 0;
+        public bool ShouldSerializeCustomEases() => CustomEases.Count > 0;
+        public bool ShouldSerializeFrameRateString() => FrameRate > 0;
+        /*public bool ShouldSerializeWidthString() => Width > 0;
+        public bool ShouldSerializeHeightString() => Height > 0;*/
 
         [XmlIgnore]
-        public SymbolTimeline Timeline
+        public required SymbolTimeline Timeline
         {
             get
             {
@@ -117,7 +159,7 @@ namespace XflComponents
                 }
                 else
                 {
-                    return TimelineList[0]!;
+                    return TimelineList[0];
                 }
             }
             set
@@ -133,78 +175,59 @@ namespace XflComponents
             }
         }
 
+        [XmlIgnore]
+        public const string LabelLayer = "label";
+        [XmlIgnore]
+        public const string ActionLayer = "action";
+        [XmlIgnore]
+        public const string InstanceLayer = "instance";
+        [XmlIgnore]
+        public const string TimelineName = "animation";
+        [XmlIgnore]
+        public const int DefaultSize = 390;
+
         /// <summary>
         /// Get a list of all symbol names listed in the DOMDocument
         /// </summary>
         /// <param name="getEndNames">Symbol names will not contain folder names if true</param>
+        /// <param name="getFileEnding">Symbol names will contain ".xml" at the end if true</param>
         /// <returns>A list of every symbol name</returns>
-        public List<string> GetAllSymbolNames(bool getEndNames = false, bool getFileEnding = false)
+        public List<string> GetAllSymbolNames(bool getFolderNames = true, bool getFileEnding = false)
         {
-            if (SymbolItemList is null) return new List<string>();
-            var symbolNames = new List<string>();
-            foreach (DOMSymbolItem? symbol in SymbolItemList)
-            {
-                if (symbol is null || symbol.href is null || symbol.GetEndSymbolFile() is null)
-                {
-                    continue;
-                }
-
-                if (getEndNames)
-                {
-                    symbolNames.Add(symbol.GetEndSymbolFile()!);
-                }
-                else
-                {
-                    symbolNames.Add(symbol.href);
-                }
-            }
-            return symbolNames;
+            var symbolNames = SymbolItemList.OfType<DOMSymbolItem>()
+                                            .Where(s => s.Href is not null)
+                                            .Select(s => s.Href);
+            if (!getFileEnding) symbolNames = symbolNames.Select(s => Path.ChangeExtension(s, null));
+            if (!getFolderNames) symbolNames = symbolNames.Select(s => Path.GetFileName(s));
+            return symbolNames.ToList();
         }
 
         /// <summary>
         /// Get a list of all bitmap names listed in the DOMDocument
         /// </summary>
-        /// <param name="getEndNames">Bitmap names will not contain folder names if true</param>
+        /// <param name="getFolderNames">Bitmap names will not contain folder names if true</param>
+        /// <param name="getFileEnding">Bitmap names will contain ".png" at the end if true</param>
         /// <returns>A list of every bitmap name</returns>
-        public List<string> GetAllBitmapNames(bool getEndNames = false, bool getFileEnding = false)
+        public List<string> GetAllBitmapNames(bool getFolderNames = true, bool getFileEnding = false)
         {
-            var bitmapNames = new List<string>();
-            if (BitmapItemList is null) return bitmapNames;
-            foreach (DOMBitmapItem? bitmap in BitmapItemList)
-            {
-                if (bitmap is null || bitmap.name is null || bitmap.href is null 
-                || bitmap.GetEndBitmapFile() is null)
-                {
-                    continue;
-                }
-
-                if (getEndNames)
-                {
-                    bitmapNames.Add(bitmap.GetEndBitmapFile()!);
-                }
-                if (getFileEnding)
-                {
-                    bitmapNames.Add(bitmap.href!);
-                }
-                else
-                {
-                    bitmapNames.Add(bitmap.name!);
-                }
-            }
-            return bitmapNames;
+            var bitmapNames = BitmapItemList.OfType<DOMBitmapItem>()
+                                            .Where(b => b.Href is not null)
+                                            .Select(b => b.Href);
+            if (!getFileEnding) bitmapNames = bitmapNames.Select(b => Path.ChangeExtension(b, null));
+            if (!getFolderNames) bitmapNames = bitmapNames.Select(b => Path.GetFileName(b));
+            return bitmapNames.ToList();
         }
 
         /// <summary>
         /// Get a list of all bitmap and symbol names listed in the DOMDocument
         /// </summary>
         /// <param name="getEndNames">Bitmap and symbol names will not contain folder names if true</param>
+        /// <param name="getFileEnding">Bitmap and symbol names will contain ".xml" at the end if true</param>
         /// <returns>A list of every bitmap and symbol name</returns>
         public List<string> GetAllSymbolBitmapNames(bool getEndNames = false, bool getFileEnding = false)
         {
-            var names = new List<string>();
-            names.AddRange(GetAllSymbolNames(getEndNames));
-            names.AddRange(GetAllBitmapNames(getEndNames, getFileEnding));
-            return names;
+            return [..GetAllSymbolNames(getEndNames, getFileEnding),
+                    ..GetAllBitmapNames(getEndNames, getFileEnding)];
         }
 
         /// <summary>
@@ -213,30 +236,22 @@ namespace XflComponents
         /// <returns>A string list of all the labels in order of what they are found in, or an empty list if none are found</returns>
         public List<string> GetAllLabels()
         {
-            if (Timeline is null || Timeline.Layers is null)
-                return [];
-            AnimateLayer? labelLayer = null;
+            var labelLayer = Timeline.GetLayerByName(LabelLayer);
+            if (labelLayer is null
+                || labelLayer.Frames is null) return [];
 
-            foreach (var layer in Timeline.Layers)
-            {
-                if (layer.name == "label")
-                {
-                    labelLayer = layer;
-                    break;
-                }
-            }
-            if (labelLayer is null || labelLayer.Frames is null)
-                return [];
-
-            List<string> labels = [];
-            foreach (var frame in labelLayer.Frames)
-            {
-                if (frame.name is not null)
-                    labels.Add(frame.name);
-            }
-
-            return labels;
+            return labelLayer.Frames
+                             .Where(f => f.Name is not null)
+                             .Select(f => f.Name!)
+                             .ToList();
         }
+
+        /// <summary>
+        /// Finds if a certain label exists in the DOMDocument's label layer
+        /// </summary>
+        /// <param name="labelToFind">Label to try to find</param>
+        /// <returns>True if the label exists, otherwise false</returns>
+        public bool HasLabel(string labelToFind) => GetAllLabels().Contains(labelToFind);
 
         /// <summary>
         /// Get a dictionary containing every label and the length of every layer
@@ -244,31 +259,12 @@ namespace XflComponents
         /// <returns>A dictionary with the key being the label name and the value being an int representing the frame duration</returns>
         public Dictionary<string, int> GetLabelLengths()
         {
-            if (Timeline is null || Timeline.Layers is null)
-                return [];
-            AnimateLayer? labelLayer = null;
+            var labelLayer = Timeline.GetLayerByName(LabelLayer);
+            if (labelLayer is null) return [];
 
-            foreach (var layer in Timeline.Layers)
-            {
-                if (layer.name == "label")
-                {
-                    labelLayer = layer;
-                    break;
-                }
-            }
-            if (labelLayer is null || labelLayer.Frames is null)
-                return [];
-
-            var toReturn = new Dictionary<string, int>();
-            foreach (var frame in labelLayer.Frames)
-            {
-                if (frame.name is not null)
-                {
-                    toReturn.Add(frame.name, frame.duration);
-                }
-            }
-
-            return toReturn;
+            return labelLayer.Frames
+                             .Where(f => f.Name is not null)
+                             .ToDictionary(f => f.Name!, f => f.Duration);
         }
 
         /// <summary>
@@ -276,89 +272,86 @@ namespace XflComponents
         /// </summary>
         /// <returns>A dictionary with the key being the label name and the value being a tuple of the start and end indexes</returns>
         public Dictionary<string, (int start, int end)> GetLabelIndexes()
-        {
+            => Timeline.GetLayerByName(LabelLayer)?
+                       .Frames
+                       .Where(f => f.Name is not null)
+                       .ToDictionary(f => f.Name!, f => (f.Index, f.Index + f.Duration - 1))
 
-            if (Timeline is null || Timeline.Layers is null)
-                return [];
-            AnimateLayer? labelLayer = null;
-
-            foreach (var layer in Timeline.Layers)
-            {
-                if (layer.name == "label")
-                {
-                    labelLayer = layer;
-                    break;
-                }
-            }
-            if (labelLayer is null || labelLayer.Frames is null)
-                return [];
-
-            var toReturn = new Dictionary<string, (int start, int end)>();
-            foreach (var frame in labelLayer.Frames)
-            {
-                if (frame.name is not null)
-                {
-                    toReturn.Add(frame.name, (frame.index, frame.index + frame.duration - 1));
-                }
-            }
-
-            return toReturn;
-        }
+                       ?? [];
 
         /// <summary>
-        /// Adds a new symbol to the DOMDocument
+        /// Adds a new DOMSymbol to the DOMDocument
         /// </summary>
         /// <param name="name">Symbol item name to add, include folders but not ".xml"</param>
+        /// <param name="includesEnd">If false, ".xml" will be added at the end of the added DOMSymbolItem</param>
         public void AddNewSymbolItem(string name, bool includesEnd = false)
         {
             if (!includesEnd) name += ".xml";
             var toAddSymbolItem = new DOMSymbolItem()
             {
-                href = name,
-                loadImmediate = "false",
-                itemIcon = "1"
+                Href = name,
+                LoadImmediate = "false",
+                ItemIcon = "1"
             };
             SymbolItemList ??= [];
             SymbolItemList.Add(toAddSymbolItem);
         }
 
         /// <summary>
-        /// Adds a new bitmap to the DOMDocument
+        /// Add a range of DOMSymbol names to the DOMDocument
         /// </summary>
-        /// <param name="name">Bitmap item name to add, include folders but not ".png"</param>
+        /// <param name="symbolNames">List of symbol names to add</param>
+        /// <param name="includesEnd">If false, ".xml" will be added at the end of the added DOMSymbolItem</param>
+        public void AddNewSymbolItemRange(string[] symbolNames, bool includesEnd = false)
+        {
+            foreach (var symbolName in symbolNames)
+            {
+                AddNewSymbolItem(symbolName, includesEnd);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new BitmapItems to the DOMDocument
+        /// </summary>
+        /// <param name="bitmapName">Bitmap item name to add, include folders but not ".png"</param>
         public void AddNewBitmapItem(string bitmapName)
         {
             var toAddBitmapItem = new DOMBitmapItem()
             {
-                name = bitmapName,
-                href = $"{bitmapName}.png",
-                originalCompressionType = "lossless"
+                Name = bitmapName,
+                Href = $"{bitmapName}.png",
+                AllowSmoothing = "true",
+                CompressionType = "lossless",
+                OriginalCompressionType = "lossless"
             };
             BitmapItemList ??= [];
             BitmapItemList.Add(toAddBitmapItem);
         }
 
         /// <summary>
+        /// Adds a range of BitmapItems to the DOMDocument
+        /// </summary>
+        /// <param name="bitmapNameList">List of bitmap names to add</param>
+        public void AddNewBitmapItemRange(string[] bitmapNameList)
+        {
+            foreach (var bitmapName in bitmapNameList)
+            {
+                AddNewBitmapItem(bitmapName);
+            }
+        }
+
+        /// <summary>
         /// Removes a symbol item from the DOMDocument
         /// </summary>
         /// <param name="name"> Symbol name to be removed, include folders but not ".xml" (unless "includesEnd" is "true")</param>
-        /// <param name="includesEnd">Put "true" if the end of each symbol item name includes ".xml"</param>
-        public void RemoveSymbolItem(string name, bool includesEnd = true)
+        /// <param name="includesEnd">If false, ".xml" will be added to "name"</param>
+        /// <returns>True if an item was removed successfully, otherwise false</returns>
+        public bool RemoveSymbolItem(string name, bool includesEnd = true)
         {
-            if (SymbolItemList is null) return;
-
-            var NewSymbolItemList = new List<DOMSymbolItem>();
-            foreach (var SymbolItem in SymbolItemList)
-            {
-                var nameToFind = SymbolItem!.href!;
-                if (includesEnd) nameToFind = nameToFind.Replace(".xml", "");
-                if (!(nameToFind == name)) // If name does not equate to provided name, skip it
-                {
-                    NewSymbolItemList.Add(SymbolItem);
-                }
-            }
-
-            SymbolItemList = NewSymbolItemList!;
+            if (!includesEnd) name = Path.ChangeExtension(name, "xml");
+            var oldSymbolCount = SymbolItemList.Count;
+            SymbolItemList = SymbolItemList.Where(s => s is not null && s.Href != name).ToList();
+            return oldSymbolCount != SymbolItemList.Count;
         }
 
         /// <summary>
@@ -366,46 +359,30 @@ namespace XflComponents
         /// </summary>
         /// <param name="nameList">List of symbol item names to remove, include folders but not ".xml" (unless "includesEnd" is "true")</param>
         /// <param name="beginning">Folder beginning to add to each symbol item name, do not include trailing "/"</param>
-        /// <param name="includesEnd">Put "true" if the end of each symbol item name includes ".xml"</param>
-        public void RemoveSymbolItem(List<string> nameList, string beginning = "", bool includesEnd = true)
+        /// <param name="includesEnd">If false, ".xml" will be added to the end of each name in `nameList`</param>
+        /// <returns>True if at least one item was removed successfully, otherwise false</returns>
+        public bool RemoveSymbolItem(List<string> nameList, string? beginning = null, bool includesEnd = true)
         {
-            if (SymbolItemList is null) return;
+            if (!includesEnd) nameList = nameList.Select(name => $"{name}.xml").ToList();
+            if (beginning is not null) nameList = nameList.Select(name => Path.Join(beginning, name)).ToList();
 
-            var NewSymbolItemList = new List<DOMSymbolItem>();
-            foreach (var SymbolItem in SymbolItemList)
-            {
-                var nameToFind = SymbolItem!.href!;
-                if (includesEnd) nameToFind = nameToFind.Replace(".xml", "");
-                if (beginning != "") nameToFind = nameToFind.Replace($"{beginning}/", "");
-
-                if (!nameList.Contains(nameToFind))
-                {
-                    NewSymbolItemList.Add(SymbolItem);
-                }
-            }
-            SymbolItemList = NewSymbolItemList!;
+            var oldSymbolCount = SymbolItemList.Count;
+            SymbolItemList = SymbolItemList.Where(s => s.Href is null || !nameList.Contains(s.Href)).ToList();
+            return oldSymbolCount != SymbolItemList.Count;
         }
+        
         /// <summary>
         /// Removes a bitmap item from the DOMDocument
         /// </summary>
         /// <param name="name"> Bitmap name to be removed, include folders but not ".png" (unless "includesEnd" is "true")</param>
         /// <param name="includesEnd">Put "true" if the end of each symbol item name includes ".png"</param>
-        public void RemoveBitmapItem(string name, bool includesEnd = true)
+        /// <returns>True if an item was removed successfully, otherwise false</returns>
+        public bool RemoveBitmapItem(string name, bool includesEnd = true)
         {
-            if (BitmapItemList is null) return;
-
-            var NewBitmapItemList = new List<DOMBitmapItem>();
-            foreach (var BitmapItem in BitmapItemList)
-            {
-                var nameToFind = BitmapItem!.href!;
-                if (includesEnd) nameToFind = nameToFind.Replace(".png", "");
-                if (!(nameToFind == name)) // If name does not equate to provided name, skip it
-                {
-                    NewBitmapItemList.Add(BitmapItem);
-                }
-            }
-
-            BitmapItemList = NewBitmapItemList!;
+            if (!includesEnd) name = Path.ChangeExtension(name, "png");
+            var oldBitmapCount = BitmapItemList.Count;
+            BitmapItemList = BitmapItemList.Where(b => b is not null && b.Href != name).ToList();
+            return oldBitmapCount != BitmapItemList.Count;
         }
 
         /// <summary>
@@ -414,33 +391,21 @@ namespace XflComponents
         /// <param name="toAddName">Folder name to add</param>
         public void AddNewFolderItem(string toAddName)
         {
-            if (FolderList is null) return;
-
-            var newFolderItem = new DOMFolder()
-            {
-                name = toAddName
-            };
-            FolderList.Add(newFolderItem);
+            FolderList ??= [];
+            FolderList.Add(new(){Name = toAddName});
         }
 
         /// <summary>
-        /// Remove a folder item to the DOMDocument
+        /// Remove a folder item in the DOMDocument
         /// </summary>
         /// <param name="name">Folder name to try to remove</param>
-        public void RemoveFolderItem(string name)
+        /// <returns>True if an item was removed successfully, otherwise false</returns>
+        public bool RemoveFolderItem(string name)
         {
-            if (FolderList is null) return;
-
-            var NewFolderList = new List<DOMFolder>();
-            foreach (var FolderItem in FolderList)
-            {
-                if (!(FolderItem!.name == name))
-                {
-                    NewFolderList.Add(FolderItem);
-                }
-            }
-
-            FolderList = NewFolderList!;
+            var oldFolderCount = FolderList.Count;
+            FolderList = FolderList.Where(f => f.Name is not null && 
+                                          f.Name != name).ToList();
+            return oldFolderCount != FolderList.Count;
         }
 
         /// <summary>
@@ -448,30 +413,115 @@ namespace XflComponents
         /// </summary>
         /// <param name="name">Symbol item name to find</param>
         /// <returns>True if a symbol item is found, otherwise false</returns>
-        public bool ContainsSymbolItem(string name)
+        public bool ContainsSymbolItem(string name) => SymbolItemList.Any(s => s.Href == name);
+        
+        /// <summary>
+        /// Get a list of all used library items by the DOMDocument
+        /// </summary>
+        /// <returns>A list of used library items</returns>
+        public List<string> GetUsedSymbols()
         {
-            if (SymbolItemList is null) return false;
-            foreach (var symbolItem in SymbolItemList)
-            {
-                if (symbolItem is not null && symbolItem.href == name)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            var instanceLayer = Timeline.GetLayerByName(InstanceLayer);
+            return instanceLayer?.GetAllLibraryItems() ?? [];
         }
 
+        /// <summary>
+        /// Finds if the DOMDocument's timeline contains the instance layer
+        /// </summary>
+        /// <returns>True if the instance layer is found, otherwise false</returns>
+        public bool ContainsInstanceLayer() => Timeline.Layers.Any(l => l.Name == InstanceLayer);
+
+        /// <summary>
+        /// Finds if the DOMDocument's timeline contains the action layer
+        /// </summary>
+        /// <returns>True if the action layer is found, otherwise false</returns>
+        public bool ContainsActionLayer() => Timeline.Layers.Any(l => l.Name == ActionLayer);
+
+        /// <summary>
+        /// Finds if the DOMDocument's timeline contains the label layer
+        /// </summary>
+        /// <returns>True if the label layer is found, otherwise false</returns>
+        public bool ContainsLabelLayer() => Timeline.Layers.Any(l => l.Name == LabelLayer);
+
+        /// <summary>
+        /// Finds if the DOMDocument's timeline contains the instance, action, and label layer
+        /// </summary>
+        /// <returns>True if the 3 necessary layers are found, otherwise false</returns>
+        public bool ContainsEssentialLayers() => ContainsInstanceLayer() &&
+                                                 ContainsActionLayer() &&
+                                                 ContainsLabelLayer();
+
+        /// <summary>
+        /// Gets the DOMDocument's instance layer
+        /// </summary>
+        /// <returns>An AnimateLayer object that is the instance layer if found, otherwise null</returns>
+        public AnimateLayer? GetInstanceLayer() => Timeline.Layers.Find(l => l.Name == InstanceLayer);
+
+        /// <summary>
+        /// Gets the DOMDocument's action layer
+        /// </summary>
+        /// <returns>An AnimateLayer object that is the action layer if found, otherwise null</returns>
+        public AnimateLayer? GetActionLayer() => Timeline.Layers.Find(l => l.Name == ActionLayer);
+
+        /// <summary>
+        /// Gets the DOMDocument's label layer
+        /// </summary>
+        /// <returns>An AnimateLayer object that is the label layer if found, otherwise null</returns>
+        public AnimateLayer? GetLabelLayer() => Timeline.Layers.Find(l => l.Name == LabelLayer);
+
+        /// <summary>
+        /// Gets a tuple of the instance, action, and label layer together
+        /// </summary>
+        /// <returns>A tuple AnimateLayer objects of the instance, action, and label layers, which each may be null if not found</returns>
+        public (AnimateLayer? instanceLayer, AnimateLayer? actionLabel, AnimateLayer? labelLayer) GetEssentialLayers()
+        => (GetInstanceLayer(), GetActionLayer(), GetLabelLayer());
+
+        public bool HasEssentialLayers() => GetInstanceLayer() is not null && GetActionLayer() is not null && GetLabelLayer() is not null;
+
+        /// <summary>
+        /// Makes a default timeline for a DOMDocument with essentail layers
+        /// </summary>
+        /// <returns>A timeline with the essential DOMDocument layers</returns>
+        public static SymbolTimeline MakeNewDOMDocumentTimeline()
+        {
+            var timeline = new SymbolTimeline()
+            {
+                Name = TimelineName,
+                Layers = [new(LabelLayer), new(ActionLayer), new(InstanceLayer)]
+            };
+
+            return timeline;
+        }
+
+        /// <summary>
+        /// Checks if the label layer of the DOMDocument contains any duplicate labels
+        /// </summary>
+        /// <returns>True if there are duplicates found, otherwise false</returns>
+        public bool ContainsDuplicateLabels()
+        {
+            var labelNames = GetLabelLayer()?.Frames
+                                            .Select(f => f.Name)
+                                            .Where(n => n is not null);
+            if (labelNames is null) return false;
+
+            var duplicateCheck = new HashSet<string>();
+            return labelNames.Any(n => !duplicateCheck.Add(n!));
+        }
+
+        /// <summary>
+        /// Get a string representation of the DOMDocument, with the number of symbol items and bitmap items
+        /// </summary>
+        /// <returns>A string with basic details of the DOMDocument</returns>
         public override string ToString()
         {
-            return $"DOMDocument with {SymbolItemList?.Count} symbols and {BitmapItemList?.Count} bitmaps";
+            return $"DOMDocument with {SymbolItemList?.Count ?? 0} symbols and {BitmapItemList?.Count ?? 0} bitmaps";
         }
     }
 
     public class SaveCustomEase
     {
-        [XmlAttribute]
-        public string? name { get; set; }
+        [XmlAttribute("name")]
+        public string? Name { get; set; }
 
         [XmlElement("Point", Namespace = "http://ns.adobe.com/xfl/2008/")]
         public List<XYPosition>? Point { get; set; }
@@ -479,9 +529,9 @@ namespace XflComponents
 
     public class PublishItem
     {
-        [XmlAttribute]
-        public string? publishSize { get; set; }
-        [XmlAttribute]
-        public string? publishTime { get; set; }
+        [XmlAttribute("publishSize")]
+        public string? PublishSize { get; set; }
+        [XmlAttribute("publishTime")]
+        public string? PublishTime { get; set; }
     }
 }

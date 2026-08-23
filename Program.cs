@@ -5,80 +5,72 @@ using UniversalMethods;
 
 namespace HelperFunctions
 {
-    public class Program
+    public static class Program
     {
         public static void Main()
         {
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("PvZ2 Helper Functions by Stuff26");
-            Console.WriteLine("Version 2.0");
-            Console.WriteLine("Intended for usage with files from Sen 4.0 by Haruma");
-            PrintDashedLine();
+            UM.PrintColoredText([
+                (ConsoleColor.Yellow, "PvZ2 Helper Functions"),
+                (ConsoleColor.DarkCyan, " by "),
+                (ConsoleColor.Green, "Stuff26\n"),
+                (ConsoleColor.DarkCyan, "Version "),
+                (ConsoleColor.Green, "2.2\n"),
+                (ConsoleColor.DarkCyan, "Intended for usage with files from "),
+                (ConsoleColor.Green, "Sen 4.0"),
+                (ConsoleColor.DarkCyan, " by "),
+                (ConsoleColor.Green, "Haruma"),
+                (ConsoleColor.DarkCyan, ", compatible with "),
+                (ConsoleColor.Green, "Snowie Lib V2"),
+                (ConsoleColor.DarkCyan, " by "),
+                (ConsoleColor.Green, "Snowie\n"),
+            ]);
             Console.WriteLine();
+            PrintDashedLine();
 
-            JsonNode? functionsJson = GetFileInLibrary("HelperFunctions.Functions.json");
+            JsonNode? functionsJson = GetJsonNodeFileInLibrary("HelperFunctions.Functions.json");
             if (functionsJson is null) return;
 
             var functionsList = DisplayOptions(functionsJson!);
             Console.ForegroundColor = ConsoleColor.White;
-            var selectedFunction = AskWhichFunction(functionsList);
-
-            var method = selectedFunction.GetMethod("Function");
-            PrintDashedLine();
+            bool isRepeat = false;
             while (true)
             {
-                try
-                {
-                    method!.Invoke(null, null);
-                    break;
-                }
-                catch (Exception e)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"ERROR: {e.GetBaseException()}");
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine("Would you like to try this again? (Y/N)");
-                }
-                bool tryAgain = false;
+                var selectedFunction = AskWhichFunction(functionsList, isRepeat);
+                if (selectedFunction is null) return;
+
+                var method = selectedFunction.GetMethod("Function");
+                PrintDashedLine();
                 while (true)
                 {
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    string? userInput = Console.ReadLine()?.ToUpper();
-                    var validResponses = new List<string>() { "Y", "N" };
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    if (string.IsNullOrWhiteSpace(userInput) || !validResponses.Contains(userInput))
+                    try
                     {
-                        Console.WriteLine("Enter Y or N");
-                        continue;
+                        method!.Invoke(null, null);
+                        break;
                     }
-
-                    if (userInput.Equals("Y", StringComparison.CurrentCultureIgnoreCase))
+                    catch (Exception e)
                     {
-                        tryAgain = true;
+                        UM.PrintColoredText([
+                            (ConsoleColor.Red, $"ERROR: {e.GetBaseException()}\n"),
+                            (ConsoleColor.DarkCyan, "Would you like to try this again?"),
+                            (ConsoleColor.Yellow, " (Y/N)\n")
+                            ]);
                     }
-                    else if (userInput.Equals("N", StringComparison.CurrentCultureIgnoreCase))
+                    var tryAgain = UserPrompts.AskYesOrNo();
+                    if (!tryAgain)
                     {
-                        tryAgain = false;
+                        break;
                     }
-                    break;
+                    PrintDashedLine();
                 }
-                if (!tryAgain)
-                {
-                    break;
-                }
+                UM.PrintColoredText(ConsoleColor.Yellow, "Finished", separateLines:true);
                 PrintDashedLine();
+                UM.PrintColoredText(ConsoleColor.DarkCyan, "Enter another function to use, or enter nothing to exit", separateLines:true);
+                isRepeat = true;
             }
-
-            PrintDashedLine();
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Finished ");
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.Write("(press enter to exit)");
-            Console.ReadLine();
         }
 
-        public static JsonNode? GetFileInLibrary(string fileName)
+        public static JsonNode? GetJsonNodeFileInLibrary(string fileName)
         {
             var assembly = Assembly.GetExecutingAssembly();
             JsonNode? FunctionsJson;
@@ -90,7 +82,29 @@ namespace HelperFunctions
                     return null;
                 }
                 using StreamReader reader = new(stream);
-                FunctionsJson = UM.ReadFileJson(reader!.ReadToEnd()!)!;
+                FunctionsJson = JsonMethods.ReadFileJson(reader!.ReadToEnd()!)!;
+                if (FunctionsJson is null)
+                {
+                    Console.WriteLine($"Could not read {fileName}");
+                    return null;
+                }
+            }
+            return FunctionsJson;
+        }
+        
+        public static JsonDocument? GetJsonDocumentFileInLibrary(string fileName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            JsonDocument? FunctionsJson;
+            using (Stream stream = assembly.GetManifestResourceStream(fileName)!)
+            {
+                if (stream is null)
+                {
+                    Console.WriteLine($"Error reading {fileName}");
+                    return null;
+                }
+                using StreamReader reader = new(stream);
+                FunctionsJson = JsonMethods.ReadFileJsonDocument(reader!.ReadToEnd()!)!;
                 if (FunctionsJson is null)
                 {
                     Console.WriteLine($"Could not read {fileName}");
@@ -107,8 +121,7 @@ namespace HelperFunctions
             List<HelperFunction> HelperFunctions = [];
 
             // Loop through each section
-            var keys = UM.GetKeysFromJsonNode(FunctionsJson);
-            int numSections = keys.Count;
+            var keys = JsonMethods.GetKeysFromJsonNode(FunctionsJson);
             int i = 0;
             foreach (var functionSectionName in keys)
             {
@@ -117,6 +130,7 @@ namespace HelperFunctions
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("- " + functionSectionName);
                 PrintDashedLine();
+                Console.WriteLine();
 
                 // Loop through each available function
                 foreach (var function in functionSection!.AsArray())
@@ -126,17 +140,12 @@ namespace HelperFunctions
                     HelperFunctions.Add(helperFunction!);
 
                     // Display the details for the function
-                    Console.ForegroundColor = ConsoleColor.Green;
                     helperFunction!.PrintDescription(currentNum);
                     Console.WriteLine();
                     currentNum++;
                 }
                 i++;
                 PrintDashedLine();
-                if (i != numSections)
-                {
-                    Console.WriteLine();
-                }
             }
 
             // Return
@@ -145,16 +154,16 @@ namespace HelperFunctions
 
         private static void PrintDashedLine()
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(DashedLine);
+            UM.PrintColoredText(ConsoleColor.White, DashedLine, separateLines:true);
         }
 
-        private static Type AskWhichFunction(List<HelperFunction> functionsList)
+        private static Type? AskWhichFunction(List<HelperFunction> functionsList, bool isRepeat)
         {
             int numOfFunctions = functionsList.Count;
             Console.ForegroundColor = ConsoleColor.Magenta;
-            int numInput = UM.AskForInt(1, numOfFunctions);
+            int numInput = UserPrompts.AskForInt(1, numOfFunctions, isRepeat);
 
+            if (numInput == 0) return null;
             var selectedFunction = functionsList[numInput - 1];
             return selectedFunction.GetFunctionClass();
         }
@@ -185,17 +194,9 @@ namespace HelperFunctions
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine($"{Name}");
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write($"Function:  ");
+            Console.Write($"* ");
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine($"{Description}");
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write($"Input:     ");
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.WriteLine($"{Input}");
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write($"Output:    ");
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.WriteLine($"{Output}");
             Console.ForegroundColor = ConsoleColor.White;
         }
 

@@ -1,32 +1,50 @@
 {
-    "XFL/PAM": [
+    "ERROR FINDERS": [
         {
             "Name": "Check XFL Errors",
             "Description": "Scan through an XFL and find any potential errors it might have",
             "Input": "XFL Folder",
-            "Output": "Message with found errors",
+            "Output": "Message with Found Errors",
             "ClassName": "CheckXflErrors"
         },
         {
-            "Name": "Rename All Layers",
-            "Description": "Go through every layer and rename them either by number or used library item",
-            "Input": "XFL Folder or single symbol",
-            "Output": "Edited symbol(s)",
-            "ClassName": "RenameAllLayers"
-        },
-        {
-            "Name": "Split Multi-library Item Layers",
-            "Description": "Split up layers that use multiple different library items",
-            "Input": "XFL Folder or single symbol",
-            "Output": "Edited symbol(s)",
-            "ClassName": "SplitMultiFrameLayers"
-        },
+            "Name": "Check Action Frames",
+            "Description": "Checks for possible errors for any action frames from Snowie Lib",
+            "Input": "XFL Folder and Packages (optional)",
+            "Output": "Message with Found Errors",
+            "ClassName": "CheckActionFrames"
+        }
+    ],
+    "MODIFIERS": [
         {
             "Name": "Offset Sprite Positions",
             "Description": "Go through every element in a symbol and offset it by a certain amount in each direction",
-            "Input": "XFL Folder or single symbol",
-            "Output": "Edited symbol(s)",
+            "Input": "XFL Folder or Single Symbol",
+            "Output": "Modified XFL or Symbol",
             "ClassName": "OffsetSpritePositions"
+        },
+        {
+            "Name": "Speed Up Symbol",
+            "Description": "Removes frames from a symbol to speed up an animation",
+            "Input": "Single Symbol",
+            "Output": "Modified Symbol",
+            "ClassName": "SpeedUpAnim"
+        }
+    ],
+    "ORGANIZATION": [
+        {
+            "Name": "Split Multi-library Item Layers",
+            "Description": "Split up layers that use multiple different library items",
+            "Input": "XFL Folder or Single Symbol",
+            "Output": "Modified XFL or Symbol",
+            "ClassName": "SplitMultiFrameLayers"
+        },
+        {
+            "Name": "Rename All Layers",
+            "Description": "Go through every layer of a symbol and rename them either by number or used library item",
+            "Input": "XFL Folder or Single Symbol",
+            "Output": "Modified XFL or Symbol",
+            "ClassName": "RenameAllLayers"
         },
         {
             "Name": "Remake XFL data.json",
@@ -36,6 +54,43 @@
             "ClassName": "RemakeXflDataJson"
         },
         {
+            "Name": "Remove Empty Layers",
+            "Description": "Delete any layers without any elements and trailing empty frames in a symbol or XFL",
+            "Input": "XFL Folder or Single Symbol",
+            "Output": "Modified XFL Folder or Symbol",
+            "ClassName": "RemoveEmptyLayers"
+        },
+        {
+            "Name": "Rename All Media",
+            "Description": "Renames all image symbols and media to a consistent naming scheme",
+            "Input": "XFL Folder",
+            "Output": "Modified XFL Folder",
+            "ClassName": "RenameAllMedia"
+        },
+        {
+            "Name": "Remove Unused Items",
+            "Description": "Remove symbols or bitmaps that aren't used from the XFL",
+            "Input": "XFL Folder",
+            "Output": "Modified XFL Folder",
+            "ClassName": "RemoveUnusedItems"
+        },
+        {
+            "Name": "Add Missing Labels",
+            "Description": "Add labels in library that aren't added to the DOMDocument",
+            "Input": "XFL Folder",
+            "Output": "Modified XFL Folder",
+            "ClassName": "AddMissingLabels"
+        },
+        {
+            "Name": "Reorganize Label Order",
+            "Description": "Readd all labels in the DOMDocument, sorted by user preference",
+            "Input": "XFL Folder",
+            "Output": "Modified XFL Folder",
+            "ClassName": "ReorganizeLabelOrder"
+        }
+    ],
+    "REMAKERS": [
+        {
             "Name": "Switch XFL Type",
             "Description": "Switch XFLs from either a split label type to a nonsplit version or vice-versa",
             "Input": "XFL Folder",
@@ -43,76 +98,48 @@
             "ClassName": "SwitchXflType"
         },
         {
-            "Name": "Remove Empty Layers",
-            "Description": "Delete any layers without any elements in a symbol or XFL",
-            "Input": "XFL Folder or single symbol",
-            "Output": "Edited symbol(s)",
-            "ClassName": "RemoveEmptyLayers"
-        },
-        {
             "Name": "Convert Newspaper Zombie XFL",
             "Description": "Adjust XFLs from Newspaper Zombie into an XFL convertable into a PAM",
             "Input": "XFL Folder",
             "Output": "New XFL",
             "ClassName": "ConvertNZXfl"
-        },
-        {
-            "Name": "Switch Image Names",
-            "Description": "Renames all media to its corresponding image or all images to its corresponding image",
-            "Input": "XFL Folder",
-            "Output": "Adjusted XFL",
-            "ClassName": "SwitchImageNames"
-        },
-        {
-            "Name": "Rename All Media",
-            "Description": "Renames all image symbols and media to a consistent naming scheme",
-            "Input": "XFL Folder",
-            "Output": "Adjusted XFL",
-            "ClassName": "RenameAllMedia"
-        },
-        {
-            "Name": "Check Action Frames",
-            "Description": "Checks for possible errors for any action frames from Snowie Lib",
-            "Input": "XFL Folder",
-            "Output": "Message with found errors",
-            "ClassName": "CheckActionFrames"
-        },
-        {
-            "Name": "Speed Up Symbol",
-            "Description": "Removes frames from a symbol to speed up an animation",
-            "Input": "XFL Symbol",
-            "Output": "Edited symbol",
-            "ClassName": "SpeedUpAnim"
         }
     ],
-    "PACKAGES": [
+    "PACKAGES EDITORS": [
         {
             "Name": "Edit Worldmap Positions",
             "Description": "Edit the position of all of the pieces of a worldmap by a certain amount",
             "Input": "Worldmap JSON",
-            "Output": "Worldmap JSON with changed positions",
+            "Output": "Worldmap JSON",
             "ClassName": "UpdateWorldmapCoordinates"
         },
         {
             "Name": "Organize Plant JSONs",
             "Description": "Reorder all plant related files by the almanac order determined in Propertysheets",
-            "Input": "Packages folder",
-            "Output": "Plant related JSONs with rearranged order",
+            "Input": "Packages Folder",
+            "Output": "Plant related JSONs",
             "ClassName": "OrganizePlantJsons"
         },
         {
             "Name": "Remake OBB data.json",
             "Description": "Remakes an OBB data.json with current SCGs in the packet folder",
             "Input": "OBB Folder",
-            "Output": "data.json with present SCGs found",
+            "Output": "data.json",
             "ClassName": "RemakeObbDataJson"
         },
         {
             "Name": "Check Level Errors",
             "Description": "Checks for possible errors in a level file",
-            "Input": "Level file and packages",
-            "Output": "Message with found errors",
+            "Input": "Level File and Packages",
+            "Output": "Message with Found Errors",
             "ClassName": "CheckLevelErrors"
+        },
+        {
+            "Name": "Check Packages Errors",
+            "Description": "Checks for missing references in several packages files",
+            "Input": "Packages",
+            "Output": "Message with Found Errors",
+            "ClassName": "ScanPackagesErrors"
         }
     ]
 }

@@ -1,0 +1,1494 @@
+{
+    "ArmorTypes": {
+        "ActionFrameGuide": {
+            "Objclass": "EntityArmorPropertySheet",
+            "Location": [
+                "$EntitiesToSpawn",
+                "loop"
+            ]
+        }
+    },
+    "CreatureTypes": {
+        "UniversalGuides": {
+            "Properties": [
+                "check_PropertySheets_ref"
+            ]
+        }
+    },
+    "ProjectileTypes": {
+        "ActionFrameGuide": {
+            "Objclass": "SnowieProjectileProps",
+            "Location": [
+                "$EntitiesToSpawn",
+                "loop"
+            ]
+        },
+        "CheckingGuides": {
+            "SapflingProjectileProps": {
+                "SapItemName": [
+                    "check_GridItemTypes"
+                ]
+            },
+            "HollyKnightLeafProps": {
+                "ShieldType": [
+                    "check_PlantTypes"
+                ]
+            },
+            "SnapPeaMedusaProjectileProps": {
+                "PetrifiedZombieType": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "BlastberryMainProjectileProps": {
+                "ChildProjectileType": [
+                    "check_ProjectileTypes"
+                ]
+            },
+            "InfernoProjectileProps": {
+                "UnmovableZombies": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ],
+                "MeltableGridItems": [
+                    "$List",
+                    "loop",
+                    "check_GridItemTypes"
+                ]
+            },
+            "InfernoPFProjectileProps": {
+                "UnmovableZombies": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ],
+                "MeltableGridItems": [
+                    "$List",
+                    "loop",
+                    "check_GridItemTypes"
+                ]
+            }
+        }
+    },
+    "PlantProperties": {
+        "UniversalGuides": {
+            "Actions": [
+                "loop",
+                "$Projectile",
+                "check_ProjectileTypes_ref"
+            ],
+            "Powers": [
+                "$List",
+                "loop",
+                "$Props",
+                "check_Powers"
+            ]
+        },
+        "CheckingGuides": {
+            "MagnifyingGrassProps": {
+                "SunproducerTypes": [
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "EMPeaProps": {
+                "AffectedZombieTypes": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "MagnetShroomProps": {
+                "PullableZombieTypes": [
+                    "loop",
+                    "check_ZombieTypes"
+                ],
+                "PullableZombieHeadTypes": [
+                    "loop",
+                    "check_ZombieTypes"
+                ],
+                "PlantFoodProjectileType": [
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "HypnoShroomProps": {
+                "CannotBeHypnotized": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "TangleKelpProps": {
+                "ZombieDrownExcludeList": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ChomperProps": {
+                "ZombieChewExcludelist": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "EnchantmintProps": {
+                "CannotBeHypnotized": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "EnforcemintProps": {
+                "CannotBeShrunk": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ConcealmintProps": {
+                "CannotBeSwallowed": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "SpearmintProps": {
+                "PlantTypeToSpawn": [
+                    "check_PlantTypes"
+                ]
+            },
+            "ShadowPeashooterProps": {
+                "ZombieSwallowExcludeList": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "GarlicProps": {
+                "ZombiesAffectedByEating": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ],
+                "ZombiesAffectedByPlantfood": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ElectricCurrantProps": {
+                "ZombiesAffectedByEating": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "AloeProps": {
+                "UnhealablePlants": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "SproutProps": {
+                "PlantWeights": [
+                    "loop",
+                    "loop",
+                    "$PlantTypeName",
+                    "check_PlantTypes"
+                ]
+            },
+            "MoonFlowerProps": {
+                "ShadowBoostable": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ShadowShroomProps": {
+                "CannotBePoisoned": [
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "GrimroseProps": {
+                "ZombieDeathExcludeList": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "TorchwoodProps": {
+                "ConvertProjectiles": [
+                    [
+                        "loop",
+                        "$InputType",
+                        "check_ProjectileTypes"
+                    ],
+                    [
+                        "loop",
+                        "$OutputType",
+                        "check_ProjectileTypes"
+                    ],
+                    [
+                        "loop",
+                        "$PFOutputType",
+                        "check_ProjectileTypes"
+                    ]
+                ]
+            },
+            "SweetPotatoProps": {
+                "MovableZombies": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "HotDateProps": {
+                "MovableZombies": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            }
+        },
+        "ToadstoolProps": {
+            "ZombieChewExcludelist": [
+                "loop",
+                "check_ZombieTypes"
+            ]
+        },
+        "CactusProps": {
+            "ZombiesWhichDoNotCauseCower": [
+                "$List",
+                "loop",
+                "check_ZombieTypes"
+            ]
+        },
+        "ShrinkingVioletProps": {
+            "UnshrinkableZombies": [
+                "$List",
+                "loop",
+                "check_ZombieTypes"
+            ]
+        },
+        "EscapeRootProps": {
+            "UnswappablePlants": [
+                "$List",
+                "loop",
+                "check_PlantTypes"
+            ]
+        },
+        "CaulipowerProps": {
+            "CannotBeHypnotized": [
+                "$List",
+                "loop",
+                "check_ZombieTypes"
+            ]
+        },
+        "SnapPeaProps": {
+            "ZombieEatTypeExcludelist": [
+                "$List",
+                "loop",
+                "check_ZombieTypes"
+            ]
+        },
+        "ZoybeanPodProps": {
+            "ZombieTypeToSpawn": [
+                "check_ZombieTypes"
+            ],
+            "PlantFoodZombieTypeToSpawn": [
+                "check_ZombieTypes"
+            ]
+        },
+        "ImpPearProps": {
+            "ImpType": [
+                "check_ZombieTypes"
+            ]
+        },
+        "ShineVineProps": {
+            "SunProducerExcludelist": [
+                "$List",
+                "loop",
+                "check_PlantTypes"
+            ]
+        },
+        "TurkeypultProps": {
+            "TurkeyTypeToSpawn": [
+                "check_ZombieTypes"
+            ],
+            "PlantfoodTurkeyTypeToSpawn": [
+                "check_ZombieTypes"
+            ]
+        },
+        "HocusCrocusProps": {
+            "CannotTeleport": [
+                "$List",
+                "loop",
+                "check_ZombieTypes"
+            ]
+        },
+        "PowerVineProps": {
+            "PFEmpBurstIncludeList": [
+                "$List",
+                "loop",
+                "check_ZombieTypes"
+            ]
+        },
+        "TeleportatoMineProps": {
+            "CannotTeleport": [
+                "$List",
+                "loop",
+                "check_ZombieTypes"
+            ]
+        }
+    }, 
+    "PlantLevels": {
+        "UniversalGuides": {
+            "TypeName": [
+                "check_PlantTypes"
+            ]
+        }
+    },
+    "PlantAlmanacData": {
+        "UniversalGuides": {
+            "TypeName": [
+                "check_PlantTypes"
+            ]
+        }
+    },
+    "PlantFamilyTypes": {
+        "UniversalGuides": {
+            "PlantType": [
+                "check_PlantTypes"
+            ]
+        }
+    },
+    "PlantTypes": {
+        "UniversalGuides": {
+            "Properties": [
+                "check_PlantProperties_ref"
+            ]
+        },
+        "CheckingGuides": {
+            "PlantTypeZombie": {
+                "ZombieType": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "PlantTypePlaceableGridItem": {
+                "GridItemType": [
+                    "check_GridItemTypes"
+                ]
+            },
+            "PlantTypePlaceableDino": {
+                "DinoType": [
+                    "check_CreatureTypes"
+                ]
+            },
+            "PlantTypeHotPotato": {
+                "TargetableGridItemTypes": [
+                    "$List",
+                    "loop",
+                    "check_GridItemTypes"
+                ],
+                "UnlockedTargetableGridItemTypes": [
+                    "$List",
+                    "loop",
+                    "check_GridItemTypes"
+                ]
+            }
+        }
+    },
+    "PowerupTypes": {
+        "CheckingGuides": {
+            "PowerupTypeSeedPacket": {
+                "PlantTypeName": [
+                    "check_PlantTypes"
+                ]
+            }
+        }
+    },
+    "ToolPackets": {
+        "UniversalGuides": {
+            "TypeToSpawn": [
+                "check_ProjectileTypes"
+            ]
+        }
+    },
+    "ZombieSwapLists": {
+        "UniversalGuides": {
+            "Value": [
+                [
+                    "loop",
+                    "$SwapZombieTypeName",
+                    "check_ZombieTypes"
+                ],
+                [
+                    "loop",
+                    "$ZombieTypeName",
+                    "check_ZombieTypes"
+                ]
+            ]
+        }
+    },
+    "ZombieActions": {
+        "CheckingGuides": {
+            "ZombossSpawnActionDefinition": {
+                "SpawnZombieTypes": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombossSummonActionDefinition": {
+                "SpawnZombieTypes": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombossSpawnDinoActionDefinition": {
+                "SpawnZombieTypes": [
+                    "loop",
+                    "check_ZombieTypes"
+                ],
+                "SpawnDinoType": [
+                    "check_CreatureTypes"
+                ]
+            },
+            "ZombieDropProps": {
+                "Zombies": [
+                    "loop",
+                    "$Type",
+                    "check_ZombieTypes"
+                ],
+                "Collectables": [
+                    "loop",
+                    "check_CollectableTypes"
+                ]
+            },
+            "ZombossDropZombieActionDefinition": {
+                "SpawnZombieTypes": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombossDropSandbagActionDefinition": {
+                "ProjectileTypeToSpawn": [
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "ZombossImpCannonActionDefinition": {
+                "ImpType": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieRomanHealerHealActionDefinition": {
+                "UnhealableZombies": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombiePushGridItemActionDefinition": {
+                "PushableGridItems": [
+                    "$List",
+                    "loop",
+                    "check_GridItemTypes"
+                ],
+                "PushBlockingGridItems": [
+                    "$List",
+                    "loop",
+                    "check_GridItemTypes"
+                ],
+                "NotSquashedPlants": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieProjectileActionDefinition": {
+                "Projectile": [
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "ZombieProjectileLaunchActionDefinition": {
+                "Projectile": [
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "ZombieDropZombiesOnBoardActionDefinition": {
+                "ZombieNames": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieSpawnActionDefinition": {
+                "SpawnZombieType": [
+                    "check_ZombieTypes"
+                ],
+                "PlantTargetExcludeList": [
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            }
+        }
+    },
+    "EffectObjectTypes": {
+        "UniversalGuides": {
+            "Properties": [
+                "check_PropertySheets_ref"
+            ]
+        }
+    },
+    "CollectableTypes": {
+        "CheckingGuides": {
+            "CollectableSeedPacketType": {
+                "PlantTypes": [
+                    "loop",
+                    "$TypeName",
+                    "check_PlantTypes"
+                ]
+            }
+        }
+    },
+    "ZombieTypes": {
+        "UniversalGuides": {
+            "Properties": [
+                "check_ZombieProperties_ref"
+            ]
+        }
+    },
+    "ZombieProperties": {
+        "UniversalGuides": {
+            "ZombieArmorProps": [
+                "loop",
+                "check_ArmorTypes_ref"
+            ]
+        },
+        "ChildClasses": {
+            "ZombieZombossMechProps": ["ZombieZombossMechBeachProps", "ZombieZombossMechCowboyProps", "ZombieZombossMechDarkProps",
+        "ZombieZombossMechDinoProps", "ZombieZombossMechEightiesProps", "ZombieZombossMechFutureProps", "ZombieZombossMechIceAgeProps",
+        "ZombieZombossMechLostCityProps", "ZombieZombossMechPirateProps"],
+            "ZombieGargantuarProps": ["ZombieEightiesGargantuarProps", "ZombieGargantuarMechProps"],
+            "ZombieGeneralProps": ["ZombieGeneralCaesarProps", "ZombieGeneralTreadmillProps", "ZombieGeneralZmechProps"],
+            "ZombieWithActionsProps": ["ZombieIceAgeHunterProps", "ZombieDarkWizardProps", "ZombieBeachOctopusProps"]
+        },
+        "CheckingGuides": {
+            "ZombieBeachFishermanProps": {
+                "PlantablePlants": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "AllowedLowPlants": [
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieZombossMechProps": {
+                "Stages": [
+                    [
+                        "loop",
+                        "$Actions",
+                        "loop",
+                        "check_ZombieActions_ref"
+                    ],
+                    [
+                        "loop",
+                        "$RetreatAction",
+                        "check_ZombieActions_ref"
+                    ]
+                ]
+            },
+            "ZombieZombossMechEgyptProps": {
+                "BoneProjectileType": [
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "ZombieChickenFarmerProps": {
+                "ChickenTypeName": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieTombRaiserProps": {
+                "Projectile": [
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "ZombieDarkJugglerProps": {
+                "AngleAgnosticProjectiles": [
+                    "loop",
+                    "check_ProjectileTypes"
+                ],
+                "JuggleableProjectiles": [
+                    "loop",
+                    "check_ProjectileTypes"
+                ]
+            },
+            "ZombieDarkKingProps": {
+                "PlantablePlants": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "ValidKnightTargets": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieEightiesBoomboxProps": {
+                "PlantBoomRestrictionSet": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieEightiesPunkProps": {
+                "PlantsToKickInsteadOfPush": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieBarrelPusherProps": {
+                "BarrelType": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieTigerGrassTigerProps": {
+                "TigerProjectile": [
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "ZombieBugProps": {
+                "PlantsWhichAlsoKillBasic": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "SpawnedZombieName": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieExcavatorProps": {
+                "ProjectileClassesToNeverBlock": [
+                    "$List",
+                    "loop",
+                    "check_ProjectileTypes"
+                ],
+                "PlantsShovelableWhileInvincible": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "PlantsToBashInsteadOfShovel": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieLostCityJaneProps": {
+                "BounceableProjectiles": [
+                    "loop",
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "ZombieRomanBallistaProps": {
+                "VaseProjectile": [
+                    "check_ProjectileTypes_ref"
+                ],
+                "ZombieSpawnData": [
+                    "$Entries",
+                    "loop",
+                    "$TypeName",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieGargantuarProps": {
+                "ImpType": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieCamelProps": {
+                "SegmentZombieType": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombiePirateCannonProps": {
+                "ImpType": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieBarrelProps": {
+                "ImpType": [
+                    "check_ZombieTypes"
+                ],
+                "PlantsWhichBreakBarrelOnCollision": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "TargetByIncludelist": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombiePianoProps": {
+                "PlantsWhichBreakPianoOnCollision": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "DanceZombies": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "ZombieHamsterBallProps": {
+                "ZombieInsideBallType": [
+                    "check_ZombieTypes"
+                ],
+                "PlantsWhichBreakBarrelOnCollision": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "TargetByIncludelist": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieEightiesArcadeProps": {
+                "Actions": [
+                    "loop",
+                    "check_ZombieActions_ref"
+                ],
+                "ArcadeType": [
+                    "check_GridItemTypes"
+                ]
+            },
+            "ZombieGeneralProps": {
+                "Actions": [
+                    "loop",
+                    "check_ZombieActions_ref"
+                ]
+            },
+            "ZombieCakeTankProps": {
+                "Actions": [
+                    "loop",
+                    "check_ZombieActions_ref"
+                ],
+                "CustomDamageSteps": [
+                    "loop",
+                    "$ActionOnStart",
+                    "check_ZombieActions_ref"
+                ]
+            },
+            "ZombieIceAgeDodoProps": {
+                "GridItemsToFlyOver": [
+                    "$List",
+                    "loop",
+                    "check_GridItemTypes"
+                ],
+                "PlantsToFlyOver": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieIceAgeTroglobiteProps": {
+                "Actions": [
+                    "loop",
+                    "check_ZombieActions_ref"
+                ],
+                "ImpType": [
+                    "check_ZombieTypes"
+                ],
+                "IceBlockType": [
+                    "check_GridItemTypes"
+                ]
+            },
+            "ZombieRomanMedusaProps": {
+                "Actions": [
+                    "loop",
+                    "check_ZombieActions_ref"
+                ],
+                "ImpType": [
+                    "check_ZombieTypes"
+                ],
+                "PetrifiedZombieType": [
+                    "check_ZombieTypes"
+                ],
+                "IceBlockType": [
+                    "check_GridItemTypes"
+                ]
+            },
+            "ZombieZCorpHelpdeskProps": {
+                "LaptopProjectile": [
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "ZombieCarnieMagicianProps": {
+                "Actions": [
+                    "loop",
+                    "check_ZombieActions_ref"
+                ],
+                "ImmuneToPlantRestrictionSet": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieRomanHealerProps": {
+                "Actions": [
+                    "loop",
+                    "check_ZombieActions_ref"
+                ],
+                "GridItemToDrop": [
+                    "check_GridItemAliases_ref"
+                ],
+                "BreaksStaff": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "BlocksStaff": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieWithActionsProps": {
+                "Actions": [
+                    "loop",
+                    "check_ZombieActions_ref"
+                ]
+            },
+            "ZombieCarnieMonkeyProps": {
+                "CoinType": [
+                    "check_CollectableTypes"
+                ]
+            },
+            "ZombieBeachSurferProps": {
+                "BreaksSurfboard": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "BlocksSurfboard": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieBeachSnorkelProps": {
+                "DamageWhileSubmerged": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "DamageWhileSubmergedPlantfoodOnly": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "TargetByIncludelist": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombieCarnieImpTwinsProps": {
+                "SpawnImpType": [
+                    "check_ZombieTypes"
+                ]
+            }
+        }
+    },
+    "GridItemProps": {
+        "UniversalGuides": {
+            "PlantingRestrictions": [
+                "$List",
+                "loop",
+                "check_PlantTypes"
+            ]
+        },
+        "CheckingGuides": {
+            "GridItemZombiePortalProps": {
+                "ZombieTypesToSpawn": [
+                    "loop",
+                    "$ZombieTypeName",
+                    "check_ZombieTypes"
+                ]
+            },
+            "GridItemGridRegionAreaOfEffectTrapProps": {
+                "EffectObjectName": [
+                    "check_EffectObjectTypes"
+                ]
+            },
+            "GridItemProjectileTrapProps": {
+                "ProjectileTypeToSpawn": [
+                    "check_ProjectileTypes_ref"
+                ]
+            },
+            "GridItemLilyPadProps": {
+                "PlantsWhichCannotBePlantedOnLilypads": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "GridItemDusklobberFlowerProps": {
+                "BombProjectile": [
+                    "check_ProjectileTypes"
+                ]
+            },
+            "GridItemSapProps": {
+                "ZombieExcludelist": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "GridItemGravestonePlantOnDestructionPropertySheet": {
+                "PlantTypeToSpawn": [
+                    "check_PlantTypes"
+                ]
+            },
+            "GridItemTentProps": {
+                "ZombieTypesToSpawn": [
+                    "loop",
+                    "$ZombieTypeName",
+                    "check_ZombieTypes"
+                ]
+            },
+            "GridItemGravestoneZombieTimeSpawnerPropertySheet": {
+                "ZombieTypeName": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "GridItemEightiesArcadeCabinetProps": {
+                "ZombieTypesToSpawn": [
+                    "loop",
+                    "$ZombieTypeName",
+                    "check_ZombieTypes"
+                ]
+            },
+            "GridItemHealerStaffProps": {
+                "UnhealableZombies": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "GridItemRailcartGlobalProperties": {
+                "StationaryGridItems": [
+                    "$List",
+                    "loop",
+                    "check_GridItemTypes"
+                ],
+                "StationaryPlantfoodedPlants": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "StationaryPlants": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "ImmovablePlants": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            }
+        }
+    },
+    "GridItemTypes": {
+        "CheckingGuides": {
+            "GridItemType": {
+                "Properties": [
+                    "check_GridItemAliases_ref"
+                ]
+            }
+        }
+    },
+    "PropertySheets": {
+        "CheckingGuides": {
+            "LibProperties": {
+                "PlantTypeMap": [
+                    "loop",
+                    "$TypeName",
+                    "check_PlantTypes"
+                ],
+                "ZombieTypeMap": [
+                    "loop",
+                    "$TypeName",
+                    "check_ZombieTypes"
+                ],
+                "ZombieVariantList": [
+                    [
+                        "loop",
+                        "$TypeName",
+                        "check_ZombieTypes"
+                    ],
+                    [
+                        "loop",
+                        "$Variants",
+                        "loop",
+                        "$TypeName",
+                        "check_ZombieTypes"
+                    ]
+                ]
+            },
+            "ExtraProperties": {
+                "PlantProps": [
+                    "loop",
+                    "$Type",
+                    "check_PlantTypes"
+                ],
+                "ZombieProps": [
+                    "loop",
+                    "$Type",
+                    "check_ZombieTypes"
+                ]
+            },
+            "SeedChooserPriorityList": {
+                "ClassicList": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "FeatureList": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "PromoList": [
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "GamePropertySheet": {
+                "PlantTypeOrder": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "ZombieAlmanacOrder": [
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "BoardPropertySheet": {
+                "LastStandPlantExcludelist": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "PlantFrostExcludelist": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "ProtectThePlantAdditionalPlantingExcludelist": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "PlantSmashAttackExcludelist": [
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "PlayerProfileProperties": {
+                "InitialPlantList": [
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "CostumePropertySheet": {
+                "CostumeList": [
+                    "loop",
+                    "$PlantTypeName",
+                    "check_PlantTypes"
+                ]
+            },
+            "WorldSpecificDangerRoomProperties": {
+                "StartingPlants": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "ExcludeList": [
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "UpgradePlantsProps": {
+                "UpgradeList": [
+                    [
+                        "loop",
+                        "$PlantType",
+                        "check_PlantTypes"
+                    ],
+                    [
+                        "loop",
+                        "$UpgradeType",
+                        "check_PlantTypes"
+                    ]
+                ]
+            },
+            "FusionPlantsProps": {
+                "FusionList": [
+                    [
+                        "loop",
+                        "$PlantType",
+                        "check_PlantTypes"
+                    ],
+                    [
+                        "loop",
+                        "$InputType",
+                        "check_PlantTypes"
+                    ],
+                    [
+                        "loop",
+                        "$FusionType",
+                        "check_PlantTypes"
+                    ]
+                ]
+            }
+        }
+    },
+    "LevelModules": {
+        "ChildClasses": {
+            "StageModuleProperties": [
+                "DinoStageProperties", "LunarStageProperties", "SportzballStageProperties", "JoustStageProperties",
+                "FutureStageProperties", "DarkStageProperties", "CarnivalStageProperties", "EgyptStageProperties", "WestStageProperties",
+                "ModernStageProperties", "LostCityStageProperties", "PirateStageProperties", "BeachStageProperties", "IceAgeStageProperties",
+                "EightiesStageProperties", "FrontLawnStageProperties", "HeroesStageProperties"
+            ],
+            "GridItemPlacementModuleProps": [
+                "GridItemPlacementChallengeModuleProps"
+            ],
+            "LevelEscalationModuleProperties": [
+                "LevelOfTheDayModuleProperties"
+            ],
+            "SpawnZombiesJitteredWaveActionProps": [
+                "SpawnZombiesFromGroundSpawnerProps", "SpawnZombiesFromGridItemSpawnerProps", "SpawnZombiesDelayedFromGridItemsProps"
+            ],
+            "ZombieRainSpawnerProps": [
+                "SpiderRainZombieSpawnerProps", "ParachuteRainZombieSpawnerProps"
+            ]
+        },
+        "CheckingGuides": 
+        {
+            "SeedBankProperties": {
+                "PresetPlantList": [
+                    "loop",
+                    "$PlantType",
+                    "check_PlantTypes"
+                ],
+                "PlantIncludeList": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "PlantExcludeList": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "SuggestPlantList": [
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "SpawnZombiesJitteredWaveActionProps": {
+                "Zombies": [
+                    "loop",
+                    "$Type",
+                    "check_ZombieAliases_ref"
+                ],
+                "GridTypes": [
+                    "loop",
+                    "check_GridItemAliases_ref"
+                ]
+            },
+            "InitialGridItemProperties": {
+                "InitialGridItemPlacements": [
+                    "loop",
+                    "$TypeName",
+                    "check_GridItemTypes"
+                ]
+            },
+            "LevelEscalationModuleProperties": {
+                "ZombiePool": [
+                    "loop",
+                    "check_ZombieAliases_ref"
+                ]
+            },
+            "WaveManagerProperties": {
+                "Waves": [
+                    "loop",
+                    "loop",
+                    "check_levelmodule_ref"
+                ],
+                "DynamicZombies": [
+                    "loop",
+                    "$ZombiePool",
+                    "loop",
+                    "check_ZombieAliases_ref"
+                ]
+            },
+            "InitialPlantProperties": {
+                "InitialPlantPlacements": [
+                    "loop",
+                    "$TypeName",
+                    "check_PlantTypes"
+                ]
+            },
+            "PickupCollectableTutorialProperties": {
+                "DropperZombieType": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "GravestoneProperties": {
+                "GravestoneTypeName": [
+                    "check_GridItemTypes"
+                ],
+                "ForceSpawnData": [
+                    "loop",
+                    "check_GridItemTypes"
+                ]
+            },
+            "StageModuleProperties": {
+                "BasicZombieTypeName": [
+                    "check_ZombieTypes"
+                ],
+                "FlagZombieTypeName": [
+                    "check_ZombieTypes"
+                ],
+                "Armor1ZombieTypeName": [
+                    "check_ZombieTypes"
+                ],
+                "Armor2ZombieTypeName": [
+                    "check_ZombieTypes"
+                ],
+                "Armor3ZombieTypeName": [
+                    "check_ZombieTypes"
+                ],
+                "Armor4ZombieTypeName": [
+                    "check_ZombieTypes"
+                ],
+                "FlagVeteranZombieTypeNames": [
+                    "loop",
+                    "check_ZombieTypes"
+                ],
+                "RailcartDefaultTypeName": [
+                    "check_GridItemTypes"
+                ],
+                "GravestoneDefaultTypeName": [
+                    "check_GridItemTypes"
+                ],
+                "PlantsWhichCannotBePlantedOnPlanks": [
+                    "$List",
+                    "loop",
+                    "check_PlantTypes"
+                ]
+            },
+            "ProtectThePlantChallengeProperties": {
+                "Plants": [
+                    "loop",
+                    "$PlantType",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombiePotionModuleProperties": {
+                "PotionTypes": [
+                    "loop",
+                    "check_GridItemTypes"
+                ]
+            },
+            "DestroyGridItemsChallengeProps": {
+                "GridItemType": [
+                    "check_GridItemTypes"
+                ]
+            },
+            "GridItemPlacementModuleProps": {
+                "Type": [
+                    "check_GridItemTypes"
+                ]
+            },
+            "CrazyOlafTestProperties": {
+                "PlantIncludelist": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "PlantExcludelist": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "PlantRequiredList": [
+                    "loop",
+                    "check_PlantTypes"
+                ],
+                "CreatureList": [
+                    "loop",
+                    "$CreatureTypeName",
+                    "check_CreatureTypes"
+                ]
+            },
+            "GeneralZombieModuleProperties": {
+                "Phases": [
+                    "loop",
+                    "$ZombieType",
+                    "check_ZombieTypes"
+                ]
+            },
+            "LootOverrideModuleProperties": {
+                "Overrides": [
+                    "loop",
+                    "$ZombieType",
+                    "check_ZombieAliases_ref"
+                ]
+            },
+            "ConveyorSeedBankProperties": {
+                "InitialPlantList": [
+                    "loop",
+                    "$PlantType",
+                    "check_PlantTypes"
+                ]
+            },
+            "ZombossBattleModuleProperties": {
+                "ZombossMechType": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "VaseBreakerPresetProperties": {
+                "VaseGridItemType": [
+                    "check_GridItemTypes"
+                ],
+                "Vases": [ 
+                    [
+                        "loop",
+                        "$ZombieTypeName",
+                        "check_ZombieTypes"
+                    ],
+                    [
+                        "loop",
+                        "$PlantTypeName",
+                        "check_PlantTypes"
+                    ],
+                    [
+                        "loop",
+                        "$CollectableTypeName",
+                        "check_CollectableTypes"
+                    ]
+                ]
+            },
+            "VaseBreakerEndlessProperties": {
+                "VaseGridItemType": [
+                    "check_GridItemTypes"
+                ],
+                "Stages": [
+                    [
+                        "loop",
+                        "$PlantTypes",
+                        "loop",
+                        "$Type",
+                        "check_PlantTypes"
+                    ],
+                    [
+                        "loop",
+                        "$CollectableTypes",
+                        "loop",
+                        "$Type",
+                        "check_CollectableTypes"
+                    ],
+                    [
+                        "loop",
+                        "$FixedZombieTypes",
+                        "loop",
+                        "$Type",
+                        "check_ZombieTypes"
+                    ]
+                ]
+            },
+            "InitialZombieProperties": {
+                "InitialZombiePlacements": [
+                    "loop",
+                    "$TypeName",
+                    "check_ZombieTypes"
+                ]
+            },
+            "DefeatZombiesOfTypeChallengeProps": {
+                "TypesToKill": [
+                    "$List",
+                    "loop",
+                    "check_ZombieTypes"
+                ]
+            },
+            "LevelDifficultyScalingModuleProperties": {
+                "ZombieLevelSwaps": [
+                    [
+                        "loop",
+                        "$Swaps",
+                        "loop",
+                        "$From",
+                        "check_ZombieAliases_ref"
+                    ],
+                    [
+                        "loop",
+                        "$Swaps",
+                        "loop",
+                        "$To",
+                        "loop",
+                        "check_ZombieAliases_ref"
+                    ]
+                ]
+            },
+            "ZombieRainSpawnerProps": {
+                "SpiderZombieName": [
+                        "check_ZombieTypes"
+                ] 
+            },
+            "StormZombieSpawnerProps": {
+                "Zombies": [
+                    "loop",
+                    "$Type",
+                    "check_ZombieAliases_ref"
+                ]
+            },
+            "HamsterZombieSpawnerProps": {
+                "Zombies": [
+                    [
+                        "loop",
+                        "$ZombieInsideBallType",
+                        "check_ZombieAliases_ref"
+                    ],
+                    [
+                        "loop",
+                        "$Type",
+                        "check_ZombieAliases_ref"
+                    ]
+                ]
+            },
+            "BeachStageEventZombieSpawnerProps": {
+                "ZombieName": [
+                    "check_ZombieTypes"
+                ]
+            },
+            "ModifyConveyorWaveActionProps": {
+                "Add": [
+                    "loop",
+                    "$Type",
+                    "check_plantalias"
+                ],
+                "Remove": [
+                    "loop",
+                    "$Type",
+                    "check_plantalias"
+                ]
+            },
+            "SpawnGravestonesWaveActionProps": {
+                "GravestonePool": [
+                    "loop",
+                    "$Type",
+                    "check_GridItemAliases_ref"
+                ]
+            },
+            "DinoWaveActionProps": {
+                "DinoType": [
+                    "check_CreatureTypes_addbegin(dino)"
+                ]
+            }
+        }
+    }
+}
