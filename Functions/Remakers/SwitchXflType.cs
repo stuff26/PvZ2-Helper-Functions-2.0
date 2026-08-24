@@ -20,8 +20,8 @@ namespace HelperFunctions.Functions.Packages
                 {xfl => xfl.DOMDocument.HasEssentialLayers(), "DOMDocument does not have essential layers, enter again"},
                 {xfl => xfl.IsSplitLabelsType() is not null, "Could not determine type of XFL, enter again"},
                 {xfl => !xfl.DOMDocument.ContainsDuplicateLabels(), "XFL can't have duplicated labels, enter again"},
-                {xfl => xfl.GetLabelsWithNoSymbol().Count == 0, "Some labels are missing label symbols, enter again"},
-                {xfl => xfl.LabelSymbolsMatchLabelSize(), "Labels in DOMDocument don't match label symbol size"},
+                {xfl => xfl.HasMainSpriteSymbol() || xfl.GetLabelsWithNoSymbol().Count == 0, "Some labels are missing label symbols, enter again"},
+                {xfl => xfl.HasMainSpriteSymbol() || xfl.LabelSymbolsMatchLabelSize(), "Labels in DOMDocument don't match label symbol size"},
                 {xfl => !xfl.HasMainSpriteSymbol() || xfl.DOMDocument.GetInstanceLayer()!.GetLayerLength() 
                         == xfl.GetMainSpriteSymbol()?.Timeline.GetTotalLength(), "Instance layer and main sprite don't have the same size"}
             });
@@ -67,7 +67,7 @@ namespace HelperFunctions.Functions.Packages
             // Edit DOMDocument references and add symbol
             UM.PrintColoredText(ConsoleColor.Green, "Editing DOMDocument... ");
             xfl.DOMDocument.AddNewSymbolItem(XFL.MainSprite);
-            xfl.DOMDocument.RemoveSymbolItem(labelSymbolDict.Keys.ToList(), XFL.LabelFolder);
+            xfl.DOMDocument.RemoveSymbolItem(labelSymbolDict.Keys.ToList(), XFL.LabelFolder, includesEnd:false);
 
             // Edit XFL object references
             xfl.Symbols.Add(mainSymbolItem);
@@ -76,9 +76,16 @@ namespace HelperFunctions.Functions.Packages
 
             // Add symbol to DOMDocument instance layer
             var instanceLayer = xfl.DOMDocument.GetInstanceLayer()!;
-            int mainSpriteLength = mainSymbolItem.Timeline.GetTotalLength();
+            var mainSpriteLength = mainSymbolItem.Timeline.GetTotalLength();
             var mainSpriteFrame = AnimateFrame.GetSingleKeyframe(0, mainSpriteLength, XFL.MainSprite);
             instanceLayer.Frames = [mainSpriteFrame];
+
+            // Remove label symbols
+
+            // Remove label folder if there are no symbols present
+            if (!xfl.Symbols.Any(s => s.GetFolder() == XFL.LabelFolder))
+                xfl.DOMDocument.RemoveFolderItem(XFL.LabelFolder);
+
             ProgressChecker.WriteFinished();
         }
 
@@ -106,7 +113,7 @@ namespace HelperFunctions.Functions.Packages
 
                 // Make label symbol
                 var labelSymbolLayers = SymbolTimeline.CutLayers(mainSpriteSymbol.Timeline.Layers, start, end);
-                var labelSymbol = new SymbolItem(labelName, labelSymbolLayers);
+                var labelSymbol = new SymbolItem(labelSymbolName, labelSymbolLayers);
 
                 // Add reference to DOMDocument and XFL object
                 xfl.DOMDocument.AddNewSymbolItem(labelSymbolName);
@@ -123,6 +130,11 @@ namespace HelperFunctions.Functions.Packages
             // Remove main_sprite
             xfl.DOMDocument.RemoveSymbolItem(XFL.MainSprite, includesEnd:false);
             xfl.Symbols.Remove(mainSpriteSymbol);
+
+            // Add label folder
+            if (!xfl.DOMDocument.FolderList.Any(f => f.Name == XFL.LabelFolder))
+                xfl.DOMDocument.AddNewFolderItem(XFL.LabelFolder);
+
             ProgressChecker.WriteFinished();
         }
 
