@@ -79,11 +79,11 @@ AI has been used for the following purposes:
 The following are examples are things not done by AI:
 - Almost all of the code
 - Main logic of all the functions
-- Bug fixing (aside from ones initially found by AI when asking for ways to improve code)
+- Bug fixing (aside from ones initially found by AI when asking for ways to improve code, other bugs were resolved without any AI usage)
 - Ideas for functions
 
 Overall, this project is not vibe coded at all and I'd say at least 98% of the overall work has been done by humans.
 AI has overall been used to help improve pre-existing code and show how to implement certain things.
 
 ## CONCLUSION
-If you have suggestions on what kind of functions to add, feel free to reach out to me either on Discord @stuff26
+If you have suggestions on what kind of functions to add, feel free to reach out to me either on Discord @stuff26.
