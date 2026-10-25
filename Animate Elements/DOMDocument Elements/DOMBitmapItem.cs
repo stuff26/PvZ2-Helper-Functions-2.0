@@ -3,6 +3,9 @@ using System.Xml;
 
 namespace XflComponents
 {
+    /// <summary>
+    /// Reference to a bitmap in the XFL
+    /// </summary>
     [XmlRoot("DOMBitmapItem", Namespace = "http://ns.adobe.com/xfl/2008/")]
     public sealed class DOMBitmapItem()
     {

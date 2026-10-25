@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace XflComponents
 {
-
+    // Contains most details of the XFL, controls references to bitmaps and symbols
     [XmlRoot("DOMDocument", Namespace = "http://ns.adobe.com/xfl/2008/")]
     public sealed class DOMDocument
     {
@@ -364,7 +364,7 @@ namespace XflComponents
         public bool RemoveSymbolItem(List<string> nameList, string? beginning = null, bool includesEnd = true)
         {
             if (!includesEnd) nameList = nameList.Select(name => $"{name}.xml").ToList();
-            if (beginning is not null) nameList = nameList.Select(name => Path.Join(beginning, name)).ToList();
+            if (beginning is not null) nameList = nameList.Select(name => $"{beginning}/{name}").ToList();
 
             var oldSymbolCount = SymbolItemList.Count;
             SymbolItemList = SymbolItemList.Where(s => s.Href is null || !nameList.Contains(s.Href)).ToList();

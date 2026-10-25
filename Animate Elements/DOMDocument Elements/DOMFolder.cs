@@ -3,6 +3,9 @@ using System.Xml;
 
 namespace XflComponents
 {
+    /// <summary>
+    /// Reference to a folder in the XFL
+    /// </summary>
     [XmlRoot("DOMFolderItem", Namespace = "http://ns.adobe.com/xfl/2008/")]
     public sealed class DOMFolder
     {

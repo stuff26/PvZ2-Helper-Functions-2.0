@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
 using System.Xml;
-using System.Numerics;
 
 namespace XflComponents
 {
@@ -10,9 +9,15 @@ namespace XflComponents
     [XmlRoot("DOMFrame", Namespace = "http://ns.adobe.com/xfl/2008/")]
     public sealed class AnimateFrame
     {
-        // Nums
+        /// <summary>
+        /// Index of the frame in its respective layer, starts at 0
+        /// </summary>
         [XmlIgnore]
         public int Index { get; set; }
+
+        /// <summary>
+        /// Dummy variable responsible for parsing, use `Index` to use the variable
+        /// </summary>
         [XmlAttribute("index")]
         public string? IndexString
         {
@@ -28,6 +33,10 @@ namespace XflComponents
                     Index = result;
             }
         }
+
+        /// <summary>
+        /// Duration of the frame in its respective layer, should be >= 1
+        /// </summary>
         [XmlIgnore]
         public int Duration {
             get
@@ -46,10 +55,15 @@ namespace XflComponents
             }
         }
 
+        /// <summary>
+        /// Dummy variable responsible for parsing, use `Duration` to use the variable
+        /// </summary>
         [XmlAttribute("duration")]
         public string? DurationString {get; set;}
 
-        // Strings
+        /// <summary>
+        /// Frame name used for labels
+        /// </summary>
         [XmlAttribute("name")]
         public string? Name { get; set; }
         [XmlAttribute("labelType")]
@@ -69,7 +83,7 @@ namespace XflComponents
         [XmlAttribute("visibleAnimationKeyframes")]
         public string? VisibleAnimationKeyframes { get; set; }
         [XmlAttribute("keyMode")]
-        public string? KeyMode { get; set; } = DefaultKeymode;
+        public string KeyMode { get; set; } = DefaultKeymode;
         [XmlAttribute("cacheAsBitmap")]
         public string? CacheAsBitmap { get; set; }
         [XmlAttribute("blendMode")]

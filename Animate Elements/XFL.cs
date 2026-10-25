@@ -6,6 +6,9 @@ using UniversalMethods;
 
 namespace XflComponents
 {
+    /// <summary>
+    /// Contains all the details of the XFL, such as path and files
+    /// </summary>
     public sealed class XFL
     {
         public string XflPath {get; set;}
@@ -133,6 +136,12 @@ namespace XflComponents
             }
         }
 
+        /// <summary>
+        /// Makes and returns an XFL object and prints an error message if unsuccessful  
+        /// </summary>
+        /// <param name="xflPath">Path to XFL that will be processed into an object</param>
+        /// <param name="options">Options that will affect how the XFL is initiazed</param>
+        /// <returns>XFL object if successful, otherwise null</returns>
         public static XFL? GetXFLSafely(string xflPath, XFLInitOptions options)
         {
             try
@@ -755,9 +764,9 @@ namespace XflComponents
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                var userInput = Console.ReadLine();
+                var userInput = Console.ReadLine()?.Trim().Replace("\"", string.Empty);
                 
-                if (string.IsNullOrWhiteSpace(userInput) || !Directory.Exists(userInput))
+                if (string.IsNullOrEmpty(userInput) || !Directory.Exists(userInput))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Enter a valid path");

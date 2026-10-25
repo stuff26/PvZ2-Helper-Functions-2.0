@@ -5,11 +5,27 @@ namespace XflComponents
 {
     public sealed class Bitmap(string bitmapDir, string name) : IDisposable
     {
+        /// <summary>
+        /// Image file contents of the bitmap
+        /// </summary>
         public Image Image = Image.Load(bitmapDir);
-        public string Name = Path.ChangeExtension(name, null); // Should not include .png at the end
 
+        /// <summary>
+        /// Bitmap name, used for identification. Should not contain ".png" at the end
+        /// </summary>
+        public string Name = Path.ChangeExtension(name, null);
+
+        /// <summary>
+        /// Width of the image file
+        /// </summary>
         public int Width => Image.Width;
+        /// <summary>
+        /// Height of the image file
+        /// </summary>
         public int Height => Image.Height;
+        /// <summary>
+        /// Tuple with width and height of the image
+        /// </summary>
         public (int width, int height) Size => (Width, Height);
 
         /// <summary>
@@ -17,8 +33,8 @@ namespace XflComponents
         /// </summary>
         /// <param name="addFileType">If true, `.png` will be added to the end of the file name</param>
         /// <returns>The file name of the bitmap</returns>
-        public string GetFileName(bool addFileType = false) => Path.GetFileName(Name) + 
-                                                               (addFileType ? ".png" : string.Empty);
+        public string GetFileName(bool addFileType = false) => Path.GetFileName(Name) 
+                                                               + (addFileType ? ".png" : string.Empty);
         
         /// <summary>
         /// Get the png file size of the bitmap
@@ -34,7 +50,7 @@ namespace XflComponents
         /// <summary>
         /// Saves the bitmap to an external path
         /// </summary>
-        /// <param name="directory">File path to save to, should not contain `.png`</param>
+        /// <param name="directory">File path to save to</param>
         public void SaveFile(string path)
         {
             path = Path.ChangeExtension(path, "png");
